@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "51029111680",
+    "project_id": "gamjamarket-1b94d",
+    "storage_bucket": "gamjamarket-1b94d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51029111680:android:77e2e9ae97a701d8ee0765",
+        "android_client_info": {
+          "package_name": "com.example.gamjamarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51029111680-pnbs0vjoh5lqv2alacd3n5nfp1op041j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gamjamarket",
+            "certificate_hash": "1c8709a8b43e3d26d7f5d425a4f80a8c026422c0"
+          }
+        },
+        {
+          "client_id": "51029111680-mqadeucaulvang4thfatmom28rmvt97p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoLXNYOZVqwKGKvsMbmswx8qriI-lldGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51029111680-mqadeucaulvang4thfatmom28rmvt97p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

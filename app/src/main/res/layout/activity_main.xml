@@ -8,19 +8,19 @@
     tools:context=".MainActivity">
 
     <FrameLayout
-        android:id="@+id/fragment_container"
-        android:background="@android:color/holo_orange_dark"
-        android:layout_weight="9"
+        android:id="@+id/mainactivity_framelayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
-    </FrameLayout>
+        android:layout_height="673dp"
+        android:layout_above="@+id/mainactivity_bottomnavigationview"
+        android:alignParantLeft="true"
+        android:alignParantTop="true"
+        android:alignParantRight="true"></FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainactivity_bottomnavigationview"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_weight="1"
         app:itemHorizontalTranslationEnabled="false"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation_main" />

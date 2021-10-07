@@ -2,19 +2,13 @@ package com.example.gamjamarket.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.gamjamarket.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.ActionCodeSettings;
-import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private Button btnLoginGo;
 
@@ -26,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         btnLoginGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent loginIntent = new Intent(StartActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
             }
         });

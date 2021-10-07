@@ -83,8 +83,8 @@ public class LoginActivity extends Activity {
                             updateUI(user);
 
                             //번호 인증 안했다면 -if문 추가
-                            //Intent phoneAuthActivity = new Intent(LoginActivity.this, PhoneAuthActivity.class);
-                            //startActivity(phoneAuthActivity);
+                            Intent phoneAuthActivity = new Intent(LoginActivity.this, PhoneAuthActivity.class);
+                            startActivity(phoneAuthActivity);
 
 
                         } else {

@@ -3,7 +3,6 @@ package com.example.gamjamarket.Login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,9 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
 
 public class LoginActivity extends Activity {
     private static final String TAG = "Login";
@@ -29,7 +26,6 @@ public class LoginActivity extends Activity {
     private EditText editPassword;
     private Button btnLogin;
     private Button btnRegister;
-    //private Bundle bundle;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +41,7 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                 String email = editEmail.getText().toString();
                 String password = editPassword.getText().toString();
+
                 signIn(email, password);
 
             }
@@ -58,6 +55,8 @@ public class LoginActivity extends Activity {
                 startActivity(registerIntent);
             }
         });
+
+
     }
 
     public void onStart() {
@@ -83,6 +82,11 @@ public class LoginActivity extends Activity {
                                     Toast.LENGTH_SHORT).show();
                             updateUI(user);
 
+                            //번호 인증 안했다면 -if문 추가
+                            Intent phoneAuthActivity = new Intent(LoginActivity.this, PhoneAuthActivity.class);
+                            startActivity(phoneAuthActivity);
+
+
                         } else {
                             //로그인 실패
                             Log.w(TAG, "로그인 실패", task.getException());
@@ -93,7 +97,6 @@ public class LoginActivity extends Activity {
                     }
                 });
     }
-
 
     private void updateUI(FirebaseUser user){
 

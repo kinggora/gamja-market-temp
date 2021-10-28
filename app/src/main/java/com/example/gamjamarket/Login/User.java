@@ -6,15 +6,15 @@ class User {
     String nickname;
     String phone;
     String dongne;
-    String uid;
+    //String uid;
 
-    User(String email, String name, String nickname, String phone, String dongne, String uid){
+    User(String email, String name, String nickname, String phone, String dongne){
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.phone = phone;
         this.dongne = dongne;
-        this.uid = uid;
+        //this.uid = uid;
     }
 
     public String getEmail() {
@@ -37,9 +37,9 @@ class User {
         return dongne;
     }
 
-    public String getUid() {
-        return uid;
-    }
+//    public String getUid() {
+//        return uid;
+//    }
 
 }
 

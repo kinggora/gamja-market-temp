@@ -1,19 +1,17 @@
 package com.example.gamjamarket.Login;
 
-public class User {
+class User {
     String email;
     String name;
     String nickname;
     String phone;
-    String dongne;
-//    String uid;
+    //String uid;
 
-    User(String email, String name, String nickname, String phone, String dongne){
+    User(String email, String name, String nickname, String phone){
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.phone = phone;
-        this.dongne = dongne;
         //this.uid = uid;
     }
 
@@ -33,14 +31,10 @@ public class User {
         return phone;
     }
 
-    public String getDongne() {
-        return dongne;
-    }
 
-/*    public String getUid() {
-        return uid;
-    }*/
-
+//    public String getUid() {
+//        return uid;
+//    }
 
 }
 

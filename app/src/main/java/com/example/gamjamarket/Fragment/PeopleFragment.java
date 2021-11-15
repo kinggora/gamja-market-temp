@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamjamarket.Chat.MessageActivity;
-import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.UserModel;
 import com.example.gamjamarket.R;
 import com.google.firebase.database.DataSnapshot;

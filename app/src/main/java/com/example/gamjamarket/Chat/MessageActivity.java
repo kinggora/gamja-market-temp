@@ -16,10 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
+import com.example.gamjamarket.Model.UserModel;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.auth.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -126,14 +125,14 @@ public class MessageActivity extends AppCompatActivity {
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         List<ChatModel.Comment> comments;
 
-        User userModel;
+        UserModel userModel;
         public RecyclerViewAdapter() {
             comments = new ArrayList<>();
 
             FirebaseDatabase.getInstance().getReference().child("users").child(destinationUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    userModel = dataSnapshot.getValue(User.class);
+                    userModel = dataSnapshot.getValue(UserModel.class);
                     getMessageList();
                 }
 
@@ -208,7 +207,7 @@ public class MessageActivity extends AppCompatActivity {
                         .load(userModel.profileImageUrl)
                         .apply(new RequestOptions().circleCrop())
                         .into(messageViewHolder.imageview_profile);*/
-                messageViewHolder.textview_name.setText(userModel.getName());
+                messageViewHolder.textview_name.setText(userModel.username);
                 messageViewHolder.linearLayout_destination.setVisibility(View.VISIBLE);
                 messageViewHolder.textView_message.setBackgroundResource(R.drawable.leftbubble);
                 messageViewHolder.textView_message.setText(comments.get(position).message);

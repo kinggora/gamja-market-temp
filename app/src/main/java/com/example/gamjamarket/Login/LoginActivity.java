@@ -14,12 +14,17 @@ import androidx.annotation.NonNull;
 
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends Activity {
     private static final String TAG = "Login";
@@ -96,6 +101,36 @@ public class LoginActivity extends Activity {
 
 
     private void updateUI(FirebaseUser user){
+        String uid = user.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userDoc = db.collection("users").document(uid);
+        userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    if(documentSnapshot.getString("dongcode") == null){
+                        Intent intent = new Intent(LoginActivity.this, DongRegisterActivity.class);
+                        startActivity(intent);
+                    }
+                    else{
+                        //동네 선택 완료한 사용자 -> 홈화면 이동
+                        Toast.makeText(LoginActivity.this, "동네 선택 완료한 사용자 -> 홈화면 이동", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(LoginActivity.this, "DocumentSnapshot is not exist.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(LoginActivity.this, "Userdata is not exist.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
     }
+
+
 }

@@ -139,8 +139,7 @@ public class RegisterActivity extends Activity {
                 String phone = editPhone.getText().toString();
                 String nickname = editNickname.getText().toString();
 
-                String dongne = "유림동";
-                user = new User(email, name, nickname, phone, dongne);
+                user = new User(email, name, nickname, phone);
 
                 if(verifyProfile(email, password, password2, name, nickname) && phoneAuth){
                     createAccount(email, password);
@@ -270,7 +269,7 @@ public class RegisterActivity extends Activity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithCredential:success");
-                            Toast.makeText(RegisterActivity.this, "인증이 성공했습니다. uid=",
+                            Toast.makeText(RegisterActivity.this, "인증이 성공했습니다.",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = task.getResult().getUser();
                             user.delete();

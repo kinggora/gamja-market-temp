@@ -5,15 +5,13 @@ class User {
     String name;
     String nickname;
     String phone;
-    String dongne;
     //String uid;
 
-    User(String email, String name, String nickname, String phone, String dongne){
+    User(String email, String name, String nickname, String phone){
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.phone = phone;
-        this.dongne = dongne;
         //this.uid = uid;
     }
 
@@ -33,9 +31,6 @@ class User {
         return phone;
     }
 
-    public String getDongne() {
-        return dongne;
-    }
 
 //    public String getUid() {
 //        return uid;

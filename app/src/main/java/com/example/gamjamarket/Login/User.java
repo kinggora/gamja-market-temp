@@ -1,12 +1,12 @@
 package com.example.gamjamarket.Login;
 
-class User {
+public class User {
     String email;
     String name;
     String nickname;
     String phone;
     String dongne;
-    //String uid;
+//    String uid;
 
     User(String email, String name, String nickname, String phone, String dongne){
         this.email = email;
@@ -37,9 +37,10 @@ class User {
         return dongne;
     }
 
-//    public String getUid() {
-//        return uid;
-//    }
+/*    public String getUid() {
+        return uid;
+    }*/
+
 
 }
 

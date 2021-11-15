@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -82,6 +83,8 @@ public class LoginActivity extends Activity {
                             Toast.makeText(LoginActivity.this, "로그인 성공",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(user);
+                            Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(mainActivity);
 
                         } else {
                             //로그인 실패

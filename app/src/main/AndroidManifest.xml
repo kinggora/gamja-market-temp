@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gamjamarket">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -9,17 +10,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GamjaMarket">
+        <activity android:name=".WritingActivity" />
         <activity android:name=".Login.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login.LoginActivity"></activity>
-        <activity android:name=".Login.RegisterActivity"></activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".Chat.MessageActivity"></activity>
-        <activity android:name=".Login.DongRegisterActivity"></activity>
+        <activity android:name=".Login.LoginActivity" />
+        <activity android:name=".Login.RegisterActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".Chat.MessageActivity" />
+        <activity android:name=".Login.DongRegisterActivity"/>
     </application>
-
 </manifest>

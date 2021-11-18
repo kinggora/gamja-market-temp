@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.auth.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,9 +46,7 @@ public class MessageActivity extends AppCompatActivity {
 
     private String uid;
     private String chatRoomUid;
-
     private RecyclerView recyclerView;
-    private FirebaseAuth mAuth;
 
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
@@ -61,7 +58,6 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        mAuth = FirebaseAuth.getInstance();
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //채팅을 요구하는 아이디
         destinationUid = getIntent().getStringExtra("destinationUid"); //채팅을 당하는 아이디

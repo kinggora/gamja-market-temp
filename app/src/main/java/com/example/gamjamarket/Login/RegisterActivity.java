@@ -3,10 +3,12 @@ package com.example.gamjamarket.Login;
 import androidx.annotation.NonNull;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -100,7 +102,7 @@ public class RegisterActivity extends Activity {
                 Log.d(TAG, "onCodeSent:" + verificationId);
                 Toast.makeText(RegisterActivity.this, "인증 번호를 입력하세요.",
                         Toast.LENGTH_SHORT).show();
-
+                btnConfirm.setEnabled(true);
                 mVerificationId = verificationId;
                 mResendToken = token;
             }
@@ -115,7 +117,6 @@ public class RegisterActivity extends Activity {
                 //한국식 핸드폰 번호
                 //String phoneNumber = "+82" + mPhoneNumber.substring(1);
                 //startPhoneNumberVerification(phoneNumber);
-                btnConfirm.setEnabled(true);
             }
         });
 
@@ -123,8 +124,15 @@ public class RegisterActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String mCode = editAuthNum.getText().toString();
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, mCode);
-                signInWithPhoneAuthCredential(credential);
+                if(mCode.length() != 0){
+                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, mCode);
+                    signInWithPhoneAuthCredential(credential);
+                }
+                else{
+                    Toast.makeText(RegisterActivity.this, "인증 번호를 입력하세요.",
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -276,9 +284,15 @@ public class RegisterActivity extends Activity {
 
                             phoneAuth = true;
                             editPhone.setClickable(false);
+                            editPhone.setFocusable(false);
                             editAuthNum.setClickable(false);
+                            editAuthNum.setFocusable(false);
                             btnSend.setEnabled(false);
                             btnConfirm.setEnabled(false);
+
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(editAuthNum.getWindowToken(), 0);
+
 
                         } else {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

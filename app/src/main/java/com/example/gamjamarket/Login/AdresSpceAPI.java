@@ -29,7 +29,7 @@ public class AdresSpceAPI {
                 urlBuilder.append("&" + "service" + "=" + "search");
                 urlBuilder.append("&" + "request" + "=" + "search");
                 urlBuilder.append("&" + "version" + "=" + "2.0");
-                urlBuilder.append("&" + "size" + "=" + "30");
+                urlBuilder.append("&" + "size" + "=" + "30");   //불러올 검색결과 개수
                 urlBuilder.append("&" + "page" + "=" + "1");
                 urlBuilder.append("&" + "type" + "=" + "district");
                 urlBuilder.append("&" + "category" + "=" + "L4");

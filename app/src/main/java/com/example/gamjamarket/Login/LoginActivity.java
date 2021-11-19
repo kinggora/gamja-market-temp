@@ -92,7 +92,6 @@ public class LoginActivity extends Activity {
                             Log.w(TAG, "로그인 실패", task.getException());
                             Toast.makeText(LoginActivity.this, "로그인 실패",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
                     }
                 });

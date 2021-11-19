@@ -87,7 +87,7 @@ public class DongRegisterActivity extends Activity {
                     public void onClick(DialogInterface dialog, int id)
                     {
                         settingDB(position);
-                        Toast.makeText(getApplicationContext(), "OK Click", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "'"+data+"' "+"로 지정되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
 

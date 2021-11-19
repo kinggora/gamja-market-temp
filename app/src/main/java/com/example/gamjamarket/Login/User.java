@@ -5,7 +5,7 @@ class User {
     String name;
     String nickname;
     String phone;
-    //String uid;
+    String uid;
 
     User(String email, String name, String nickname, String phone){
         this.email = email;
@@ -32,9 +32,9 @@ class User {
     }
 
 
-//    public String getUid() {
-//        return uid;
-//    }
+    public String getUid() {
+        return uid;
+    }
 
 }
 

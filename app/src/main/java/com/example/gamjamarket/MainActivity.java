@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gamjamarket.Chat.MessageActivity;
 import com.example.gamjamarket.Fragment.ChatFragment;
+import com.example.gamjamarket.Fragment.HomeFragment;
 import com.example.gamjamarket.Fragment.PeopleFragment;
 import com.example.gamjamarket.Login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_home:
-                    getFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new PeopleFragment()).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new HomeFragment()).commit();
                     return true;
                 case R.id.action_home2:
                     //getFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();

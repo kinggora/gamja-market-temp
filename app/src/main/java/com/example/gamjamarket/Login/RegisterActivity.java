@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.gamjamarket.Model.UserModel;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
@@ -148,6 +150,11 @@ public class RegisterActivity extends Activity {
                 String nickname = editNickname.getText().toString();
 
                 user = new User(email, name, nickname, phone);
+                //추가
+                UserModel userModel = new UserModel();
+                userModel.username = name;
+                String uid = mAuth.getCurrentUser().getUid();
+                FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(userModel);
 
                 if(verifyProfile(email, password, password2, name, nickname) && phoneAuth){
                     createAccount(email, password);

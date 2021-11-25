@@ -1,18 +1,24 @@
  package com.example.gamjamarket;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.example.gamjamarket.Model.CategoryModel;
 import com.example.gamjamarket.Model.WriteinfoModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,7 +27,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
@@ -42,10 +51,26 @@ public class WritingActivity extends AppCompatActivity {
     private int imageCount = 0;
     private static final int PICK_FROM_ALBUM = 10;
 
+
+    private Button categoryBtn;
+    private ArrayList<CategoryModel> categoryList = new ArrayList<CategoryModel>();
+    private ArrayList<String> categoryNameList = new ArrayList<String>();
+    private int categoryIdx = 999;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        categoryBtn = (Button)findViewById(R.id.categoryButton);
+        categoryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createListDialog();
+            }
+        });
+
         parent = findViewById(R.id.addphoto_imagelist);
 
         btnUpload = (Button)findViewById(R.id.addphoto_btn_upload);
@@ -67,10 +92,8 @@ public class WritingActivity extends AppCompatActivity {
                 title = ((EditText) findViewById(R.id.addphoto_edit_title)).getText().toString();
                 explain = ((EditText) findViewById(R.id.addphoto_edit_explain)).getText().toString();
 
-                if (title.length() > 0) {
+                if (title.length() > 0 && categoryIdx != 999) {
                     //ArrayList<String> contentsList = new ArrayList<>();
-                    user = FirebaseAuth.getInstance().getCurrentUser();
-
                     FirebaseStorage.getInstance().getReference().child("images").child(user.getUid()).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -78,7 +101,7 @@ public class WritingActivity extends AppCompatActivity {
                             while(!imageUrl.isComplete());
                             //contentsList.add(imageUrl.getResult().toString());
                             contentsList = imageUrl.getResult().toString();
-                            WriteinfoModel writeinfoModel = new WriteinfoModel(title, explain, contentsList, user.getUid(), new Date());
+                            WriteinfoModel writeinfoModel = new WriteinfoModel(title, categoryNameList.get(categoryIdx), explain, contentsList, user.getUid(), new Date());
                             storeUploader(writeinfoModel);
                         }
                     });
@@ -143,19 +166,89 @@ public class WritingActivity extends AppCompatActivity {
 
     private void storeUploader(WriteinfoModel writeinfoModel) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(writeinfoModel)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        DocumentReference userDoc = db.collection("users").document(user.getUid());
+        userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String dongcode = documentSnapshot.getString("dongcode");
+                String categoryId = categoryList.get(categoryIdx).getId();
+                db.collection("board1").document(dongcode).collection(categoryId).add(writeinfoModel)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot written with ID: "+ documentReference.getId());
+                        Toast.makeText(WritingActivity.this, "글 작성 완료", Toast.LENGTH_SHORT).show();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("writeinfoModel", writeinfoModel);
+                        //Intent PostviewActivity = new Intent(WritingActivity.this, PostviewActivity.class);
+                        //PostviewActivity.putExtras(bundle);
                     }
                 })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "Error adding document", e);
+                                Toast.makeText(WritingActivity.this, "글 작성 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error adding document", e);
+                        Toast.makeText(WritingActivity.this, "유저 데이터 불러오기 실패", Toast.LENGTH_SHORT).show();
+
                     }
                 });
+
     }
+
+    public void categoryListInitialization(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("categories").orderBy("index")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            CategoryModel model = new CategoryModel(document.getId(),
+                                    document.getString("name"));
+                            categoryList.add(model);
+                            categoryNameList.add(model.getName());
+                        }
+                        createListDialog();
+                    }
+                    else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        System.out.println("Error getting documents");
+
+                    }
+                }
+            });
+    }
+
+    public void createListDialog(){
+        if(categoryList.isEmpty()){
+            categoryListInitialization();
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(WritingActivity.this);
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, categoryNameList);
+            builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    categoryIdx = which;
+                    categoryBtn.setText(categoryNameList.get(categoryIdx));
+                    categoryBtn.invalidate();
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+
+
 
 }

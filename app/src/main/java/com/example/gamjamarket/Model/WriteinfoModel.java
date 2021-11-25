@@ -1,17 +1,20 @@
 package com.example.gamjamarket.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class WriteinfoModel {
+public class WriteinfoModel implements Serializable {
     private String title;
     private String explain;
     private String contents;
     private String uid; //작성자
     private Date createdAt;
+    private String category;
 
-    public WriteinfoModel(String title, String explain, String contents, String uid, Date createdAt){
+    public WriteinfoModel(String title, String category, String explain, String contents, String uid, Date createdAt){
         this.title = title;
+        this.category = category;
         this.explain = explain;
         this.contents = contents;
         this.uid = uid;
@@ -37,6 +40,11 @@ public class WriteinfoModel {
     public Date getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(Date createdAt) {this.createdAt = createdAt;}
+    public void setCreatedAt(Date createdAt) {this.createdAt = createdAt; }
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {this.category = category;}
+
 
 }

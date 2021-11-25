@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.gamjamarket.MainActivity;
-import com.example.gamjamarket.Model.UserModel;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,9 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,7 +36,7 @@ public class LoginActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
         editEmail = (EditText) findViewById(R.id.login_email);
@@ -113,8 +110,6 @@ public class LoginActivity extends Activity {
                         startActivity(intent);
                     }
                     else{
-                        //동네 선택 완료한 사용자 -> 홈화면 이동
-                        Toast.makeText(LoginActivity.this, "동네 선택 완료한 사용자 -> 홈화면 이동", Toast.LENGTH_SHORT).show();
                         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(mainActivity);
                     }

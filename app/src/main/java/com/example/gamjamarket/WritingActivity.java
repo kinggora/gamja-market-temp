@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.gamjamarket.Home1.PostviewActivity;
 import com.example.gamjamarket.Model.CategoryModel;
 import com.example.gamjamarket.Model.WriteinfoModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,7 +54,6 @@ public class WritingActivity extends AppCompatActivity {
 
 
     private Button categoryBtn;
-    private ArrayList<CategoryModel> categoryList = new ArrayList<CategoryModel>();
     private ArrayList<String> categoryNameList = new ArrayList<String>();
     private int categoryIdx = 999;
 
@@ -171,8 +171,11 @@ public class WritingActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String dongcode = documentSnapshot.getString("dongcode");
-                String categoryId = categoryList.get(categoryIdx).getId();
-                db.collection("board1").document(dongcode).collection(categoryId).add(writeinfoModel)
+                String dongname = documentSnapshot.getString("dongname");
+                writeinfoModel.setDongcode(dongcode);
+                writeinfoModel.setDongname(dongname);
+
+                db.collection("board1").add(writeinfoModel)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -211,10 +214,7 @@ public class WritingActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            CategoryModel model = new CategoryModel(document.getId(),
-                                    document.getString("name"));
-                            categoryList.add(model);
-                            categoryNameList.add(model.getName());
+                            categoryNameList.add(document.getString("name"));
                         }
                         createListDialog();
                     }
@@ -228,7 +228,7 @@ public class WritingActivity extends AppCompatActivity {
     }
 
     public void createListDialog(){
-        if(categoryList.isEmpty()){
+        if(categoryNameList.isEmpty()){
             categoryListInitialization();
         }else{
             AlertDialog.Builder builder = new AlertDialog.Builder(WritingActivity.this);

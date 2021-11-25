@@ -11,6 +11,8 @@ public class WriteinfoModel implements Serializable {
     private String uid; //작성자
     private Date createdAt;
     private String category;
+    private String dongcode;
+    private String dongname;
 
     public WriteinfoModel(String title, String category, String explain, String contents, String uid, Date createdAt){
         this.title = title;
@@ -45,6 +47,10 @@ public class WriteinfoModel implements Serializable {
         return category;
     }
     public void setCategory(String category) {this.category = category;}
+    public String getDongcode(){ return dongcode;}
+    public void setDongcode(String dongcode){this.dongcode = dongcode;}
+    public String getDongname(){ return dongname;}
+    public void setDongname(String dongname){this.dongname = dongname;}
 
 
 }

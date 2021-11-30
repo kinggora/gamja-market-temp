@@ -111,7 +111,6 @@ public class DongRegisterActivity extends Activity {
                     }
                 });
 
-
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
@@ -127,8 +126,16 @@ public class DongRegisterActivity extends Activity {
         String dongName = mAdresApceAPI.getName(i);
 
         DocumentReference userDoc = db.collection("users").document(uid);
-        userDoc.update("dongcode", dongCode);
+        userDoc.update("dongcode", dongCode).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Intent mainActivity = new Intent(DongRegisterActivity.this, MainActivity.class);
+                startActivity(mainActivity);
+            }
+        });
         userDoc.update("dongname", dongName);
+
+
 
     }
 }

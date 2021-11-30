@@ -181,6 +181,7 @@ public class PostviewActivity extends FragmentActivity {
         //게시물 찜 수
         DocumentReference postDoc = db.collection("board1").document(pid);
 
+        //like++
         if(like){
             //해당 유저의 like 정보가 없을 때
             if(nodoc){
@@ -226,6 +227,7 @@ public class PostviewActivity extends FragmentActivity {
                     });
 
         }
+        //like--
         else{
             myHeartDoc.update("board1", FieldValue.arrayRemove(pid));
 

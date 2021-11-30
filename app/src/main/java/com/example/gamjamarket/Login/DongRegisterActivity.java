@@ -130,47 +130,5 @@ public class DongRegisterActivity extends Activity {
         userDoc.update("dongcode", dongCode);
         userDoc.update("dongname", dongName);
 
-        Map<String, Object> board = new HashMap<>();
-        board.put("dongcode", dongCode);
-        board.put("dongname", dongName);
-
-        DocumentReference docRef = db.collection("board1").document(dongCode);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    //동네 게시판이 존재하면 홈 화면 이동
-                    if (document.exists()) {
-                        Toast.makeText(DongRegisterActivity.this,  "Already exist the board.", Toast.LENGTH_SHORT).show();
-                        Intent mainActivity = new Intent(DongRegisterActivity.this, MainActivity.class);
-                        startActivity(mainActivity);
-                    }
-                    //동네 게시판이 존재하지 않으면 생성 후 이동
-                    else {
-                        db.collection("board1").document(dongCode).set(board)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(DongRegisterActivity.this,  "Create new dongne board.", Toast.LENGTH_SHORT).show();
-                                        Intent mainActivity = new Intent(DongRegisterActivity.this, MainActivity.class);
-                                        startActivity(mainActivity);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-
-                                    }
-                                });
-                    }
-                } else {
-                    String TAG = "Dongne Borad Creating";
-                    Log.d(TAG, "Failed with: ", task.getException());
-                }
-            }
-        });
-
-
     }
 }

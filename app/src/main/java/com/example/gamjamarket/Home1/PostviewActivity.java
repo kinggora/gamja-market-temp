@@ -1,16 +1,256 @@
 package com.example.gamjamarket.Home1;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
+import com.example.gamjamarket.Chat.MessageActivity;
+import com.example.gamjamarket.Model.WriteinfoModel;
 import com.example.gamjamarket.R;
+import com.example.gamjamarket.WritingActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 
-public class PostviewActivity extends Activity {
+import org.w3c.dom.Text;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class PostviewActivity extends FragmentActivity {
+    private static final String TAG = "PostviewActivity";
+    private String pid;
+    private String uid;
+    private WriteinfoModel model;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private boolean like = false;
+    private boolean nodoc = false;
+    private ImageView heartImage;
+    private TextView type;
+    private Button chatBtn;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_postview);
+        setContentView(R.layout.activity_post);
 
+        pid = getIntent().getExtras().getString("pid");
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        heartImage = (ImageView) findViewById(R.id.post_heartImageview);
+        type = (TextView) findViewById(R.id.post_typeTextview);
+        chatBtn = (Button) findViewById(R.id.post_chatBtn);
+
+        Initialization();
+    }
+
+    public void Initialization(){
+        DocumentReference postDoc = db.collection("board1").document(pid);
+        postDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String title = document.getString("title");
+                        String category = document.getString("category");
+                        String explain = document.getString("explain");
+                        String contents = document.getString("contents");
+                        String wuid = document.getString("uid");
+                        String type = document.getString("type");
+                        String nickname = document.getString("nickname");
+                        Date createdAt = document.getDate("createAt");
+                        String dongcode = document.getString("dongcode");
+                        String dongname = document.getString("dongname");
+                        String pid = document.getString("pid");
+                        int likes = document.getDouble("likes").intValue();
+                        int views = document.getDouble("views").intValue();
+
+                        model = new WriteinfoModel(title, category, explain, contents, type, wuid, nickname, createdAt, dongcode, dongname);
+                        model.setPid(pid);
+                        model.setLikes(likes);
+                        model.setViews(views);
+                        setUI();
+
+                    } else {
+                        Log.d(TAG, "no such document", task.getException());
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    public void setUI(){
+        type.setText(model.getType());
+
+        if(model.getUid().equals(uid)){
+            chatBtn.setEnabled(false);
+            chatBtn.setClickable(false);
+        }
+
+        PostviewFragment postviewFragemnt = new PostviewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("writeinfoModel", model);
+        postviewFragemnt.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.postviewFramelayout, postviewFragemnt).commit();
+
+        DocumentReference myHeartDoc = db.collection("likes").document(uid);
+        myHeartDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        List<String> board1 = (List<String>) document.get("board1");
+                        for(String mpid: board1){
+                            if(mpid.equals(pid)){
+                                like = true;
+                                setLikeUI();
+                            }
+                        }
+
+                    } else {
+                        Log.d(TAG, "no such document", task.getException());
+                        nodoc = true;
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+        heartImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                like = !like;
+                postviewFragemnt.likeClick(like);
+                setLikeUI();
+                setLikeDB();
+            }
+        });
+
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent messageActivity = new Intent(PostviewActivity.this, MessageActivity.class);
+                messageActivity.putExtras(getIntent().getExtras());
+                startActivity(messageActivity);
+            }
+        });
 
     }
+
+    public void setLikeUI(){
+        if(like){
+            heartImage.setImageResource(R.drawable.fillheart);
+        }
+        else{
+            heartImage.setImageResource(R.drawable.emptyheart);
+        }
+    }
+
+    public void setLikeDB() {
+        //유저 찜 목록
+        DocumentReference myHeartDoc = db.collection("likes").document(uid);
+        //게시물 찜 수
+        DocumentReference postDoc = db.collection("board1").document(pid);
+
+        if(like){
+            //해당 유저의 like 정보가 없을 때
+            if(nodoc){
+                Map<String, Object> docData = new HashMap<>();
+                docData.put("board1", Arrays.asList(pid));
+                db.collection("likes").document(uid).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        nodoc = false;
+                    }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error writing document", e);
+                            }
+                        });
+            }
+            else{
+                myHeartDoc.update("board1", FieldValue.arrayUnion(pid));
+            }
+
+            db.runTransaction(new Transaction.Function<Void>() {
+                @Override
+                public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                    DocumentSnapshot snapshot = transaction.get(postDoc);
+                    double newLikes = snapshot.getDouble("likes") + 1;
+                    transaction.update(postDoc, "likes", newLikes);
+                    return null;
+                }
+            }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "Transaction success!");
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Transaction failure.", e);
+                        }
+                    });
+
+        }
+        else{
+            myHeartDoc.update("board1", FieldValue.arrayRemove(pid));
+
+            db.runTransaction(new Transaction.Function<Void>() {
+                @Override
+                public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                    DocumentSnapshot snapshot = transaction.get(postDoc);
+                    double newLikes = snapshot.getDouble("likes") - 1;
+                    transaction.update(postDoc, "likes", newLikes);
+                    return null;
+                }
+            }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "Transaction success!");
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Transaction failure.", e);
+                        }
+                    });
+        }
+
+    }
+
 }

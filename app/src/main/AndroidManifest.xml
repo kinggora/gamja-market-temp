@@ -23,6 +23,7 @@
         <activity android:name=".Login.RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Chat.MessageActivity" />
-        <activity android:name=".Login.DongRegisterActivity"/>
+        <activity android:name=".Login.DongRegisterActivity" />
+        <activity android:name=".Home1.PostviewActivity" />
     </application>
 </manifest>

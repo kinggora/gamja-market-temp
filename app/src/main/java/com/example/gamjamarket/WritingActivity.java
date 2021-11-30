@@ -13,13 +13,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.gamjamarket.Home1.PostviewActivity;
-import com.example.gamjamarket.Model.CategoryModel;
 import com.example.gamjamarket.Model.WriteinfoModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +47,8 @@ public class WritingActivity extends AppCompatActivity {
     private Button btnUpload;
     private ImageView addImage;
     private Uri imageUri;
+    private CheckBox typeCheck0;
+    private CheckBox typeCheck1;
     private ArrayList<String> pathList = new ArrayList<>();
     private LinearLayout parent;
     private int imageCount = 0;
@@ -85,14 +87,17 @@ public class WritingActivity extends AppCompatActivity {
             }
         });
 
+        typeCheck0 = (CheckBox)findViewById(R.id.typeCheckBox_0);
+        typeCheck1 = (CheckBox)findViewById(R.id.typeCheckBox_1);
+
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 title = ((EditText) findViewById(R.id.addphoto_edit_title)).getText().toString();
                 explain = ((EditText) findViewById(R.id.addphoto_edit_explain)).getText().toString();
-
-                if (title.length() > 0 && categoryIdx != 999) {
+                boolean typecheck = typeCheck0.isChecked() || typeCheck1.isChecked();
+                if (title.length() > 0 && categoryIdx != 999 && typecheck) {
                     //ArrayList<String> contentsList = new ArrayList<>();
                     FirebaseStorage.getInstance().getReference().child("images").child(user.getUid()).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -101,8 +106,7 @@ public class WritingActivity extends AppCompatActivity {
                             while(!imageUrl.isComplete());
                             //contentsList.add(imageUrl.getResult().toString());
                             contentsList = imageUrl.getResult().toString();
-                            WriteinfoModel writeinfoModel = new WriteinfoModel(title, categoryNameList.get(categoryIdx), explain, contentsList, user.getUid(), new Date());
-                            storeUploader(writeinfoModel);
+                            storeUploader();
                         }
                     });
 
@@ -164,7 +168,7 @@ public class WritingActivity extends AppCompatActivity {
 
     }
 
-    private void storeUploader(WriteinfoModel writeinfoModel) {
+    private void storeUploader() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userDoc = db.collection("users").document(user.getUid());
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -172,19 +176,29 @@ public class WritingActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String dongcode = documentSnapshot.getString("dongcode");
                 String dongname = documentSnapshot.getString("dongname");
-                writeinfoModel.setDongcode(dongcode);
-                writeinfoModel.setDongname(dongname);
+                String nickname = documentSnapshot.getString("nickname");
+                String type = getType();
+                WriteinfoModel writeinfoModel = new WriteinfoModel(title, categoryNameList.get(categoryIdx), explain,
+                        contentsList, type, user.getUid(), nickname, new Date(), dongcode, dongname);
 
                 db.collection("board1").add(writeinfoModel)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot written with ID: "+ documentReference.getId());
-                        Toast.makeText(WritingActivity.this, "글 작성 완료", Toast.LENGTH_SHORT).show();
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("writeinfoModel", writeinfoModel);
-                        //Intent PostviewActivity = new Intent(WritingActivity.this, PostviewActivity.class);
-                        //PostviewActivity.putExtras(bundle);
+                        db.collection("board1").document(documentReference.getId()).update("pid", documentReference.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(WritingActivity.this, "글 작성 완료", Toast.LENGTH_SHORT).show();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("pid", documentReference.getId());
+                                Intent PostviewActivity = new Intent(WritingActivity.this, com.example.gamjamarket.Home1.PostviewActivity.class);
+                                PostviewActivity.putExtras(bundle);
+                                startActivity(PostviewActivity);
+                                finish();
+
+                            }
+                        });
                     }
                 })
                         .addOnFailureListener(new OnFailureListener() {
@@ -246,6 +260,16 @@ public class WritingActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
         }
+    }
+
+    public String getType(){
+        if(typeCheck0.isChecked() && typeCheck1.isChecked()){
+            return "직거래/택배";
+        }
+        else if(typeCheck0.isChecked()){
+            return "직거래만";
+        }
+        return "택배거래만";
     }
 
 

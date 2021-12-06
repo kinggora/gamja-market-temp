@@ -23,6 +23,10 @@ public class PostlistItem {
         this.likes = likes;
     }
 
+    public PostlistItem() {
+
+    }
+
     public String getTitle() {
         return title;
     }

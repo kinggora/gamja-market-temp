@@ -1,5 +1,7 @@
 package com.example.gamjamarket.Fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gamjamarket.Chat.MessageActivity;
 import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.R;
 import com.google.firebase.database.DataSnapshot;
@@ -63,7 +66,7 @@ public class PeopleFragment extends Fragment {
             //프사 Glide.with(holder.itemView.getContext()).load(userModels.get(position).profileImageUrl).apply(new RequestOptions().circleCrop()).into(((CustomViewHolder)holder).imageView);
             ((CustomViewHolder)holder).textView.setText(userModels.get(position).getNickname());
             //클릭시 채팅창으로 이동
-            /*holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), MessageActivity.class);
@@ -71,7 +74,7 @@ public class PeopleFragment extends Fragment {
                     ActivityOptions activityOptions = null;
                     startActivity(intent);
                 }
-            });*/
+            });
         }
 
         @Override

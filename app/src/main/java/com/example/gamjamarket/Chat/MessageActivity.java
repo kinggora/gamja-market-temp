@@ -46,6 +46,8 @@ public class MessageActivity extends AppCompatActivity {
     private String destinationUid;
     private Button button;
     private EditText editText;
+    private String productImage;
+    private String productName;
 
     private String uid;
     private String chatRoomUid;
@@ -69,6 +71,8 @@ public class MessageActivity extends AppCompatActivity {
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //채팅을 요구하는 아이디
         destinationUid = getIntent().getStringExtra("destinationUid");
+        productImage = getIntent().getStringExtra("productImage");
+        productName = getIntent().getStringExtra("productName");
         button = (Button)findViewById(R.id.messageActivity_button);
         editText = (EditText)findViewById(R.id.messageActivity_editText);
 
@@ -126,7 +130,6 @@ public class MessageActivity extends AppCompatActivity {
                     ChatModel chatModel = item.getValue(ChatModel.class);
                     if (chatModel.users.containsKey(destinationUid) && chatModel.users.size() == 2) {
                         chatRoomUid = item.getKey();
-                        System.out.println("chatRoomUid: "+chatRoomUid);
                         button.setEnabled(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(MessageActivity.this));
                         recyclerView.setAdapter(new RecyclerViewAdapter());
@@ -147,6 +150,7 @@ public class MessageActivity extends AppCompatActivity {
         public RecyclerViewAdapter() {
             comments = new ArrayList<>();
             mDatabase = FirebaseDatabase.getInstance().getReference();
+
             mDatabase.child("users").child(destinationUid).addListenerForSingleValueEvent(new ValueEventListener()
             {
                 @Override
@@ -300,16 +304,19 @@ public class MessageActivity extends AppCompatActivity {
             public TextView textView_timestamp;
             public TextView textView_readCounter_left;
             public TextView textView_readCounter_right;
-
+            public ImageView imageView_pImage;
+            public TextView textView_pTitle;
 
             public MessageViewHolder(View view) {
                 super(view);
+                imageView_pImage = (ImageView) view.findViewById(R.id.messageItem_toolbar_image);
+                textView_pTitle = (TextView) view.findViewById(R.id.messageItem_toolbar_title);
                 textView_message_left = (TextView) view.findViewById(R.id.messageItem_textView_messageLeft);
                 textView_message_right = (TextView) view.findViewById(R.id.messageItem_textView_messageRight);
                 textview_name = (TextView) view.findViewById(R.id.messageItem_textview_name);
                 imageview_profile = (ImageView) view.findViewById(R.id.messageItem_imageview_profile);
                 linearLayout_destination = (LinearLayout) view.findViewById(R.id.messageItem_linearlayout_destination);
-                linearLayout_main = (LinearLayout)view.findViewById(R.id.messageItem_linearLayout_main);
+                linearLayout_main = (LinearLayout) view.findViewById(R.id.messageItem_linearLayout_main);
                 textView_timestamp = (TextView)view.findViewById(R.id.messageItem_textview_timestemp);
                 textView_readCounter_left = (TextView)view.findViewById(R.id.messageItem_textview_readCounter_left);
                 textView_readCounter_right = (TextView)view.findViewById(R.id.messageItem_textview_readCounter_right);

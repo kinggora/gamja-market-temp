@@ -7,32 +7,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.gamjamarket.Chat.MessageActivity;
 import com.example.gamjamarket.Model.WriteinfoModel;
 import com.example.gamjamarket.R;
-import com.example.gamjamarket.WritingActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
-
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -159,7 +151,8 @@ public class PostviewActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent messageActivity = new Intent(PostviewActivity.this, MessageActivity.class);
-                messageActivity.putExtras(getIntent().getExtras());
+                //messageActivity.putExtras(getIntent().getExtras());
+                messageActivity.putExtra("destinationUid",pid);
                 startActivity(messageActivity);
             }
         });

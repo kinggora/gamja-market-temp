@@ -1,7 +1,5 @@
 package com.example.gamjamarket.Login;
 
-import androidx.annotation.NonNull;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +10,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
@@ -57,6 +58,7 @@ public class RegisterActivity extends Activity {
     private boolean phoneAuth = false;
 
     private User user;
+    private User userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +167,7 @@ public class RegisterActivity extends Activity {
     }
 
     private void createAccount(String email, String password) {
+        userModel = new User();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -179,6 +182,9 @@ public class RegisterActivity extends Activity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            userModel.nickname = editNickname.getText().toString();
+                                            userModel.uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                            FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(userModel);
                                             Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                                             startActivity(loginIntent);
                                         }

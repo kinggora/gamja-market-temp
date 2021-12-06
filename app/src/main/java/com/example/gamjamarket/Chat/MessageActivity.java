@@ -1,11 +1,7 @@
 package com.example.gamjamarket.Chat;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +12,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
-import com.example.gamjamarket.Model.UserModel;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class MessageActivity extends AppCompatActivity {
+    private static final String TAG = "MessageActivity";
 
     private String destinationUid;
     private Button button;
@@ -49,18 +52,23 @@ public class MessageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
+    private DatabaseReference mDatabase;
+    private FirebaseFirestore db;
+
     int peopleCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //채팅을 요구하는 아이디
-        destinationUid = getIntent().getStringExtra("destinationUid"); //채팅을 당하는 아이디
+        destinationUid = getIntent().getStringExtra("destinationUid");
         button = (Button)findViewById(R.id.messageActivity_button);
         editText = (EditText)findViewById(R.id.messageActivity_editText);
 
@@ -73,7 +81,7 @@ public class MessageActivity extends AppCompatActivity {
                 chatModel.users.put(destinationUid,true);
                 if(chatRoomUid == null) {
                     button.setEnabled(false);
-                    FirebaseDatabase.getInstance().getReference().child("chatrooms").push().setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mDatabase.child("chatrooms").child(destinationUid).setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             checkChatRoom();
@@ -84,10 +92,11 @@ public class MessageActivity extends AppCompatActivity {
                     comment.uid = uid;
                     comment.message = editText.getText().toString();
                     comment.timestamp = ServerValue.TIMESTAMP;
-                    FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    mDatabase.child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             editText.setText(""); //초기화
+
                         }
                     });
                 }
@@ -96,14 +105,28 @@ public class MessageActivity extends AppCompatActivity {
         checkChatRoom();
     }
     //중복되는 채팅방 체크
-    void checkChatRoom(){
-        FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+    void checkChatRoom() {
+        mDatabase.child("chatrooms").orderByChild("users/" + uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot item: dataSnapshot.getChildren()) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() == null){
+                    ChatModel newRoom = new ChatModel();
+                    newRoom.users.put(uid, true);
+                    newRoom.users.put(destinationUid, true);
+                    mDatabase.child("chatrooms").child(destinationUid).setValue(newRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            checkChatRoom();
+                        }
+                    });
+                    return;
+                }
+
+                for (DataSnapshot item : dataSnapshot.getChildren()) {
                     ChatModel chatModel = item.getValue(ChatModel.class);
-                    if(chatModel.users.containsKey(destinationUid)){
+                    if (chatModel.users.containsKey(destinationUid) && chatModel.users.size() == 2) {
                         chatRoomUid = item.getKey();
+                        System.out.println("chatRoomUid: "+chatRoomUid);
                         button.setEnabled(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(MessageActivity.this));
                         recyclerView.setAdapter(new RecyclerViewAdapter());
@@ -112,7 +135,7 @@ public class MessageActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
@@ -120,15 +143,15 @@ public class MessageActivity extends AppCompatActivity {
     //Adapter
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         List<ChatModel.Comment> comments;
-
-        UserModel userModel;
+        User userModel;
         public RecyclerViewAdapter() {
             comments = new ArrayList<>();
-
-            FirebaseDatabase.getInstance().getReference().child("users").child(destinationUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child("users").child(destinationUid).addListenerForSingleValueEvent(new ValueEventListener()
+            {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    userModel = dataSnapshot.getValue(UserModel.class);
+                    userModel = dataSnapshot.getValue(User.class);
                     getMessageList();
                 }
 
@@ -140,7 +163,8 @@ public class MessageActivity extends AppCompatActivity {
         }
         //메세지 읽어오기
         void getMessageList(){
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments");
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            databaseReference = mDatabase.child("chatrooms").child(chatRoomUid).child("comments");
             valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -154,8 +178,11 @@ public class MessageActivity extends AppCompatActivity {
                         readUsersMap.put(key, comment_modify);
                         comments.add(comment_origin);
                     }
-                    if(!comments.get(comments.size()-1).readUsers.containsKey(uid)) {
-                        FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments")
+                    if(comments.size() == 0){
+                        return;
+                    }
+                    else if(!comments.get(comments.size()-1).readUsers.containsKey(uid)) {
+                        mDatabase.child("chatrooms").child(chatRoomUid).child("comments")
                                 .updateChildren(readUsersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -172,7 +199,7 @@ public class MessageActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    Log.w(TAG, "loadPost:onCancelled", error.toException());
                 }
             });
         }
@@ -190,10 +217,12 @@ public class MessageActivity extends AppCompatActivity {
             MessageViewHolder messageViewHolder = ((MessageViewHolder)holder);
             //내가보낸 메세지
             if(comments.get(position).uid.equals(uid)) {
-                messageViewHolder.textView_message.setText(comments.get(position).message);
-                messageViewHolder.textView_message.setBackgroundResource(R.drawable.rightbubble);
+                messageViewHolder.textView_message_right.setText(comments.get(position).message);
+                messageViewHolder.textView_message_right.setBackgroundResource(R.drawable.rightbubble);
+                messageViewHolder.textView_message_right.setVisibility(View.VISIBLE);
+                messageViewHolder.textView_message_left.setVisibility(View.INVISIBLE);
                 messageViewHolder.linearLayout_destination.setVisibility(View.INVISIBLE);
-                messageViewHolder.textView_message.setTextSize(25);
+                messageViewHolder.textView_message_right.setTextSize(25);
                 messageViewHolder.linearLayout_main.setGravity(Gravity.RIGHT);
                 setReadCounter(position, messageViewHolder.textView_readCounter_left);
             }
@@ -203,12 +232,15 @@ public class MessageActivity extends AppCompatActivity {
                         .load(userModel.profileImageUrl)
                         .apply(new RequestOptions().circleCrop())
                         .into(messageViewHolder.imageview_profile);*/
-                messageViewHolder.textview_name.setText(userModel.username);
+                messageViewHolder.textview_name.setText(userModel.getNickname());
                 messageViewHolder.linearLayout_destination.setVisibility(View.VISIBLE);
-                messageViewHolder.textView_message.setBackgroundResource(R.drawable.leftbubble);
-                messageViewHolder.textView_message.setText(comments.get(position).message);
-                messageViewHolder.textView_message.setTextSize(25);
+                messageViewHolder.textView_message_left.setBackgroundResource(R.drawable.leftbubble);
+                messageViewHolder.textView_message_left.setText(comments.get(position).message);
+                messageViewHolder.textView_message_left.setTextSize(25);
+                messageViewHolder.textView_message_left.setVisibility(View.VISIBLE);
+                messageViewHolder.textView_message_right.setVisibility(View.INVISIBLE);
                 messageViewHolder.linearLayout_main.setGravity(Gravity.LEFT);
+                messageViewHolder.textView_readCounter_left.setVisibility(View.INVISIBLE);
                 setReadCounter(position, messageViewHolder.textView_readCounter_right);
 
             }
@@ -220,8 +252,9 @@ public class MessageActivity extends AppCompatActivity {
         }
         //읽은사람 수 체크
         void setReadCounter(final int position, final TextView textView) {
+            mDatabase = FirebaseDatabase.getInstance().getReference();
             if(peopleCount == 0) {
-                FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabase.child("chatrooms").child(chatRoomUid).child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Map<String, Boolean> users = (Map<String, Boolean>) snapshot.getValue();
@@ -258,7 +291,8 @@ public class MessageActivity extends AppCompatActivity {
 
         //뷰를 재사용할 때 쓰는 클래스
         private class MessageViewHolder extends RecyclerView.ViewHolder {
-            public TextView textView_message;
+            public TextView textView_message_left;
+            public TextView textView_message_right;
             public TextView textview_name;
             public ImageView imageview_profile;
             public LinearLayout linearLayout_destination;
@@ -270,7 +304,8 @@ public class MessageActivity extends AppCompatActivity {
 
             public MessageViewHolder(View view) {
                 super(view);
-                textView_message = (TextView) view.findViewById(R.id.messageItem_textView_message);
+                textView_message_left = (TextView) view.findViewById(R.id.messageItem_textView_messageLeft);
+                textView_message_right = (TextView) view.findViewById(R.id.messageItem_textView_messageRight);
                 textview_name = (TextView) view.findViewById(R.id.messageItem_textview_name);
                 imageview_profile = (ImageView) view.findViewById(R.id.messageItem_imageview_profile);
                 linearLayout_destination = (LinearLayout) view.findViewById(R.id.messageItem_linearlayout_destination);
@@ -283,12 +318,11 @@ public class MessageActivity extends AppCompatActivity {
 
         }
     }
-   //애니메이션
-/*    @Override
+    @Override
     public void onBackPressed() {
         //super.onBackPressed();
         databaseReference.removeEventListener(valueEventListener);
         finish();
-        overridePendingTransition(R.anim.fromleft, R.anim.toright);
-    }*/
+        //overridePendingTransition(R.anim.fromleft, R.anim.toright);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.gamjamarket.Chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,8 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gamjamarket.Home1.PostviewActivity;
 import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
+import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,6 +51,9 @@ public class MessageActivity extends AppCompatActivity {
     private EditText editText;
     private String productImage;
     private String productName;
+    private ImageView imageView_pImage;
+    private TextView textView_pTitle;
+    private LinearLayout linearLayoutProduct;
 
     private String uid;
     private String chatRoomUid;
@@ -71,12 +77,26 @@ public class MessageActivity extends AppCompatActivity {
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //채팅을 요구하는 아이디
         destinationUid = getIntent().getStringExtra("destinationUid");
-        productImage = getIntent().getStringExtra("productImage");
-        productName = getIntent().getStringExtra("productName");
+        //productImage = getIntent().getStringExtra("productImage");
+        //productName = getIntent().getStringExtra("productName");
+        productImage = "https://firebasestorage.googleapis.com/v0/b/gamjamarket-1b94d.appspot.com/o/images%2FPzag23QtI6gY4CjVZKRQOfftHuy2?alt=media&token=e0481e31-8a42-4a7b-a8d3-6c7a140da5e4";
+        productName = "감자";
+        linearLayoutProduct = (LinearLayout)findViewById(R.id.messageActivity_LinearLayout);
         button = (Button)findViewById(R.id.messageActivity_button);
         editText = (EditText)findViewById(R.id.messageActivity_editText);
-
+        imageView_pImage = (ImageView) findViewById(R.id.messageActivity_toolbar_image);
+        textView_pTitle = (TextView) findViewById(R.id.messageActivity_toolbar_title);
+        textView_pTitle.setText(productName);
         recyclerView = (RecyclerView)findViewById(R.id.messageActivity_recyclerview);
+        linearLayoutProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //제품상세페이지로이동
+                Intent intent = new Intent(v.getContext(), PostviewActivity.class);
+                //intent.putExtra("destinationUid", destinationUsers.get(position));
+                startActivity(intent);
+            }
+        });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +109,16 @@ public class MessageActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             checkChatRoom();
+                        }
+                    });
+                    //post정보추가(toolbar)
+                    PostlistItem postlistItem = new PostlistItem();
+                    postlistItem.setTitle(productName);
+                    postlistItem.setContents(productImage);
+                    mDatabase.child("chatrooms").child(destinationUid).child("post").setValue(postlistItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
                         }
                     });
                 }else {
@@ -304,13 +334,9 @@ public class MessageActivity extends AppCompatActivity {
             public TextView textView_timestamp;
             public TextView textView_readCounter_left;
             public TextView textView_readCounter_right;
-            public ImageView imageView_pImage;
-            public TextView textView_pTitle;
 
             public MessageViewHolder(View view) {
                 super(view);
-                imageView_pImage = (ImageView) view.findViewById(R.id.messageItem_toolbar_image);
-                textView_pTitle = (TextView) view.findViewById(R.id.messageItem_toolbar_title);
                 textView_message_left = (TextView) view.findViewById(R.id.messageItem_textView_messageLeft);
                 textView_message_right = (TextView) view.findViewById(R.id.messageItem_textView_messageRight);
                 textview_name = (TextView) view.findViewById(R.id.messageItem_textview_name);

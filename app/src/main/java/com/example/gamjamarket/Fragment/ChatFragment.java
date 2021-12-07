@@ -83,7 +83,7 @@ public class ChatFragment extends Fragment {
             String destinationUid = null;
             for (String user: chatModels.get(position).users.keySet()) {
                 if (!user.equals(uid)) {
-                    destinationUid = uid;
+                    destinationUid = user;
                     destinationUsers.add(destinationUid);
                 }
             }

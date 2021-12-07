@@ -1,11 +1,13 @@
 package com.example.gamjamarket.Login;
 
-class User {
+public class User {
     String email;
     String name;
     String nickname;
     String phone;
     String uid;
+
+    public User(){}
 
     User(String email, String name, String nickname, String phone){
         this.email = email;

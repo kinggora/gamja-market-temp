@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamjamarket.Chat.MessageActivity;
+import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
-import com.example.gamjamarket.Model.UserModel;
 import com.example.gamjamarket.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -84,17 +84,18 @@ public class ChatFragment extends Fragment {
             for (String user: chatModels.get(position).users.keySet()) {
                 if (!user.equals(uid)) {
                     destinationUid = uid;
+                    destinationUsers.add(destinationUid);
                 }
             }
             FirebaseDatabase.getInstance().getReference().child("users").child(destinationUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    UserModel userModel = snapshot.getValue(UserModel.class);
+                    User userModel = snapshot.getValue(User.class);
                     /*Glide.with(customViewHolder.itemView.getContext())
                             .load(userModel.profileImageUrl)
                             .apply(new RequestOptions().circleCrop())
                             .into(customViewHolder.imageView);*/
-                    customViewHolder.textView_title.setText(userModel.username);
+                    customViewHolder.textView_title.setText(userModel.getNickname());
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -114,6 +115,7 @@ public class ChatFragment extends Fragment {
                     //대화창 넘기는 애니메이션
 /*                    ActivityOptions activityOptions  = ActivityOptions.makeCustomAnimation(v.getContext(), R.anim.fromright, R.anim.toleft);
                     startActivity(intent, activityOptions.toBundle());*/
+                    startActivity(intent);
 
                 }
             });

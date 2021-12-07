@@ -156,7 +156,10 @@ public class PostviewActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent messageActivity = new Intent(PostviewActivity.this, MessageActivity.class);
-                messageActivity.putExtras(getIntent().getExtras());
+                //messageActivity.putExtras(getIntent().getExtras());
+                messageActivity.putExtra("destinationUid",uid);
+                messageActivity.putExtra("productImage",model.getTitle());
+                messageActivity.putExtra("productName",model.getTitle());
                 startActivity(messageActivity);
             }
         });

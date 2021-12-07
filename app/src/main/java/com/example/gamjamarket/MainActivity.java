@@ -2,19 +2,12 @@ package com.example.gamjamarket;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.gamjamarket.Chat.MessageActivity;
 import com.example.gamjamarket.Fragment.ChatFragment;
+import com.example.gamjamarket.Home2.Home2Fragment;
 import com.example.gamjamarket.Fragment.HomeFragment;
-import com.example.gamjamarket.Fragment.PeopleFragment;
-import com.example.gamjamarket.Login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends FragmentActivity {
@@ -31,7 +24,7 @@ public class MainActivity extends FragmentActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new HomeFragment()).commit();
                     return true;
                 case R.id.action_home2:
-                    //getFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new Home2Fragment()).commit();
                     return true;
                 case R.id.action_write:
                     Intent writingActivity = new Intent(MainActivity.this, WritingActivity.class);

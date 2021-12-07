@@ -1,6 +1,7 @@
 package com.example.gamjamarket.Home1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,17 @@ public class PostviewFragment extends Fragment {
         category.setText(model.getCategory());
         likesnum.setText(Integer.toString(model.getLikes()));
         viewsnum.setText(Integer.toString(model.getViews()));
+
+        contentsImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent imageviewActivity = new Intent(v.getContext(), ImageviewActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("contents", model.getContents());
+                imageviewActivity.putExtras(bundle);
+                v.getContext().startActivity(imageviewActivity);
+            }
+        });
 
         return view;
     }

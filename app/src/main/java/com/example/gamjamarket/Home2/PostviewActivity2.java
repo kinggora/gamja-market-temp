@@ -1,17 +1,18 @@
-package com.example.gamjamarket.Home1;
+package com.example.gamjamarket.Home2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.gamjamarket.Chat.MessageActivity;
+import com.example.gamjamarket.Home1.PostviewFragment;
 import com.example.gamjamarket.Model.WriteinfoModel;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,15 +28,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
 
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PostviewActivity extends FragmentActivity {
-    private static final String TAG = "PostviewActivity";
+public class PostviewActivity2 extends FragmentActivity {
+    private static final String TAG = "PostviewActivity2";
     private String pid;
     private String uid;
 
@@ -44,25 +44,25 @@ public class PostviewActivity extends FragmentActivity {
     private boolean like = false;
     private boolean nodoc = false;
     private ImageView heartImage;
-    private TextView type;
     private Button chatBtn;
+    private Button callBtn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_post2);
 
         pid = getIntent().getExtras().getString("pid");
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         heartImage = (ImageView) findViewById(R.id.post2_heartImageview);
-        type = (TextView) findViewById(R.id.post_typeTextview);
+        callBtn = (Button) findViewById(R.id.post2_callBtn);
         chatBtn = (Button) findViewById(R.id.post2_chatBtn);
 
         Initialization();
     }
 
     public void Initialization(){
-        DocumentReference postDoc = db.collection("board1").document(pid);
+        DocumentReference postDoc = db.collection("board2").document(pid);
         postDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -73,20 +73,17 @@ public class PostviewActivity extends FragmentActivity {
                         String category = document.getString("category");
                         String explain = document.getString("explain");
                         String contents = document.getString("contents");
+                        String address = document.getString("address");
+                        String callnumber = document.getString("callnumber");
                         String wuid = document.getString("uid");
-                        String type = document.getString("type");
                         String nickname = document.getString("nickname");
                         Date createdAt = document.getDate("createAt");
-                        String dongcode = document.getString("dongcode");
-                        String dongname = document.getString("dongname");
                         String pid = document.getString("pid");
                         int likes = document.getDouble("likes").intValue();
-                        int views = document.getDouble("views").intValue();
 
-                        WriteinfoModel model = new WriteinfoModel(title, category, explain, contents, type, wuid, nickname, createdAt, dongcode, dongname);
+                        WriteinfoModel model = new WriteinfoModel(title, category, explain, contents, address, callnumber, wuid, nickname, createdAt);
                         model.setPid(pid);
                         model.setLikes(likes);
-                        model.setViews(views);
                         setUI(model);
 
                     } else {
@@ -100,14 +97,12 @@ public class PostviewActivity extends FragmentActivity {
     }
 
     public void setUI(WriteinfoModel model){
-        type.setText(model.getType());
-
         if(model.getUid().equals(uid)){
             chatBtn.setEnabled(false);
             chatBtn.setClickable(false);
         }
 
-        PostviewFragment postviewFragemnt = new PostviewFragment();
+        PostviewFragment2 postviewFragemnt = new PostviewFragment2();
         Bundle bundle = new Bundle();
         bundle.putSerializable("writeinfoModel", model);
         postviewFragemnt.setArguments(bundle);
@@ -120,9 +115,9 @@ public class PostviewActivity extends FragmentActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        if(document.get("board1")!=null){
-                            List<String> board1 = (List<String>) document.get("board1");
-                            for(String mpid: board1){
+                        if(document.get("board2")!=null){
+                            List<String> board2 = (List<String>) document.get("board2");
+                            for(String mpid: board2){
                                 if(mpid.equals(pid)){
                                     like = true;
                                     setLikeUI();
@@ -146,7 +141,7 @@ public class PostviewActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 like = !like;
-                postviewFragemnt.likeClick(like);
+                //postviewFragemnt.likeClick(like);
                 setLikeUI();
                 setLikeDB();
             }
@@ -155,9 +150,17 @@ public class PostviewActivity extends FragmentActivity {
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent messageActivity = new Intent(PostviewActivity.this, MessageActivity.class);
+                Intent messageActivity = new Intent(PostviewActivity2.this, MessageActivity.class);
                 messageActivity.putExtras(getIntent().getExtras());
                 startActivity(messageActivity);
+            }
+        });
+
+        callBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                String phone = model.getCallnumber();
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                startActivity(intent);
             }
         });
 
@@ -176,14 +179,14 @@ public class PostviewActivity extends FragmentActivity {
         //유저 찜 목록
         DocumentReference myHeartDoc = db.collection("likes").document(uid);
         //게시물 찜 수
-        DocumentReference postDoc = db.collection("board1").document(pid);
+        DocumentReference postDoc = db.collection("board2").document(pid);
 
         //like++
         if(like){
             //해당 유저의 like 정보가 없을 때
             if(nodoc){
                 Map<String, Object> docData = new HashMap<>();
-                docData.put("board1", Arrays.asList(pid));
+                docData.put("board2", Arrays.asList(pid));
                 db.collection("likes").document(uid).set(docData, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -199,7 +202,7 @@ public class PostviewActivity extends FragmentActivity {
                         });
             }
             else{
-                myHeartDoc.update("board1", FieldValue.arrayUnion(pid));
+                myHeartDoc.update("board2", FieldValue.arrayUnion(pid));
             }
 
             db.runTransaction(new Transaction.Function<Void>() {
@@ -226,7 +229,7 @@ public class PostviewActivity extends FragmentActivity {
         }
         //like--
         else{
-            myHeartDoc.update("board1", FieldValue.arrayRemove(pid));
+            myHeartDoc.update("board2", FieldValue.arrayRemove(pid));
 
             db.runTransaction(new Transaction.Function<Void>() {
                 @Override
@@ -253,3 +256,4 @@ public class PostviewActivity extends FragmentActivity {
     }
 
 }
+

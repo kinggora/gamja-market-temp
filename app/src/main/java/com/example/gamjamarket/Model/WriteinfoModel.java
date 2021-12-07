@@ -15,6 +15,8 @@ public class WriteinfoModel implements Serializable {
     private String dongname;
     private String nickname;
     private String type;
+    private String address;
+    private String callnumber;
 
     private String pid; //게시글id
     //----------여기까지 object 생성시 초기화 필요---------------
@@ -22,9 +24,9 @@ public class WriteinfoModel implements Serializable {
     private int likes = 0; //찜
     private int views = 0; //조회수
 
-
     public WriteinfoModel(){}
 
+    //board1 게시물 생성자
     public WriteinfoModel(String title, String category, String explain, String contents, String type, String uid, String nickname, Date createdAt, String dongcode, String dongname){
         this.title = title;
         this.category = category;
@@ -36,6 +38,19 @@ public class WriteinfoModel implements Serializable {
         this.createdAt = createdAt;
         this.dongcode = dongcode;
         this.dongname = dongname;
+    }
+
+    //board2 게시물 생성자
+    public WriteinfoModel(String title, String category, String explain, String contents, String address, String callnumber, String uid, String nickname, Date createdAt){
+        this.title = title;
+        this.category = category;
+        this.explain = explain;
+        this.contents = contents;
+        this.address = address;
+        this.callnumber = callnumber;
+        this.uid = uid;
+        this.nickname = nickname;
+        this.createdAt = createdAt;
     }
 
     public String getTitle() {
@@ -72,6 +87,10 @@ public class WriteinfoModel implements Serializable {
     public String getPid(){ return pid; }
     public void setType(String type){ this.type = type;}
     public String getType(){ return type;}
+    public String getAddress(){ return address;}
+    public void setAddress(String address){this.address = address;}
+    public String getCallnumber(){ return callnumber;}
+    public void setCallnumber(String callnumber){this.callnumber = callnumber;}
 
     public int getLikes(){ return likes; }
     public void setLikes(int likes){ this.likes = likes; }

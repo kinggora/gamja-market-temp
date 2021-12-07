@@ -10,8 +10,10 @@ public class PostlistItem {
     private String nickname;
     private String type;
     private String pid; //게시글id
+    private String callnumber;
     private int likes;
 
+    //board1 게시물 생성자
     public PostlistItem(String pid, String title, String contents, String type, String uid, String nickname, Date createdAt, int likes){
         this.pid = pid;
         this.title = title;
@@ -21,6 +23,17 @@ public class PostlistItem {
         this.nickname = nickname;
         this.createdAt = createdAt;
         this.likes = likes;
+    }
+
+    //board2 게시물 생성자 (거래방법 type 없음)
+    public PostlistItem(String pid, String title, String contents, String uid, String nickname, Date createdAt, String callnumber){
+        this.pid = pid;
+        this.title = title;
+        this.contents = contents;
+        this.uid = uid;
+        this.nickname = nickname;
+        this.createdAt = createdAt;
+        this.callnumber = callnumber;
     }
 
     public String getTitle() {
@@ -49,6 +62,9 @@ public class PostlistItem {
 
     public void setType(String type){ this.type = type;}
     public String getType(){ return type;}
+
+    public void setCallnumber(String callnumber){ this.callnumber = callnumber;}
+    public String getCallnumber(){ return callnumber;}
 
     public int getLikes(){ return likes; }
     public void setLikes(int likes){ this.likes = likes; }

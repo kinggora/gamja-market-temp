@@ -25,5 +25,7 @@
         <activity android:name=".Chat.MessageActivity" />
         <activity android:name=".Login.DongRegisterActivity" />
         <activity android:name=".Home1.PostviewActivity" />
+        <activity android:name=".Home2.PostviewActivity2" />
+        <activity android:name=".Home1.ImageviewActivity" />
     </application>
 </manifest>

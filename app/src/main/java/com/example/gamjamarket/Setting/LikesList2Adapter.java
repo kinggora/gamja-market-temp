@@ -1,4 +1,4 @@
-package com.example.gamjamarket.Home2;
+package com.example.gamjamarket.Setting;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,30 +12,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Transaction;
 
 import java.util.ArrayList;
 
-public class Home2PostAdapter extends RecyclerView.Adapter<com.example.gamjamarket.Home2.Home2PostAdapter.ViewHolder>{
-    private static final String TAG = "Home2PostAdapter";
+public class LikesList2Adapter extends RecyclerView.Adapter<com.example.gamjamarket.Setting.LikesList2Adapter.ViewHolder>{
+    private static final String TAG = "LikesList2Adapter";
 
     private static ArrayList<PostlistItem> postList;
     private Context context;
 
-    public Home2PostAdapter(ArrayList mArraylist, Context context){
+    public LikesList2Adapter(ArrayList mArraylist, Context context){
         postList = (ArrayList<PostlistItem>)mArraylist;
         this.context = context;
     }
@@ -57,11 +48,12 @@ public class Home2PostAdapter extends RecyclerView.Adapter<com.example.gamjamark
 
                 }
             });
-            itemImage = (ImageView) v.findViewById(R.id.home2_imageview);
-            itemTitle = (TextView) v.findViewById(R.id.home2_textview_title);
-            itemNickname = (TextView) v.findViewById(R.id.home2_textview_nickname);
-            itemPlanBtn = (Button) v.findViewById(R.id.home2_planBtn);
-            itemCallBtn = (Button) v.findViewById(R.id.home2_btn);
+
+            itemImage = (ImageView) v.findViewById(R.id.likelist_image);
+            itemTitle = (TextView) v.findViewById(R.id.likelist_title);
+            itemNickname = (TextView) v.findViewById(R.id.likelist_nickname);
+            itemPlanBtn = (Button) v.findViewById(R.id.likelist_btn1);
+            itemCallBtn = (Button) v.findViewById(R.id.likelist_btn2);
 
             itemCallBtn.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
@@ -89,15 +81,15 @@ public class Home2PostAdapter extends RecyclerView.Adapter<com.example.gamjamark
 
     }
 
-    public com.example.gamjamarket.Home2.Home2PostAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public com.example.gamjamarket.Setting.LikesList2Adapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_posts2, viewGroup, false);
-        return new com.example.gamjamarket.Home2.Home2PostAdapter.ViewHolder(v);
+                .inflate(R.layout.item_likelist2, viewGroup, false);
+        return new com.example.gamjamarket.Setting.LikesList2Adapter.ViewHolder(v);
     }
 
 
-    public void onBindViewHolder (com.example.gamjamarket.Home2.Home2PostAdapter.ViewHolder viewHolder, final int position){
+    public void onBindViewHolder (com.example.gamjamarket.Setting.LikesList2Adapter.ViewHolder viewHolder, final int position){
         Log.d(TAG, "Element " + position + " set.");
         Glide.with(context)
                 .load(postList.get(position).getContents())

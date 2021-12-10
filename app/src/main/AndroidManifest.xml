@@ -9,8 +9,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_config"
-        android:theme="@style/Theme.GamjaMarket">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:networkSecurityConfig="@xml/network_config">
         <activity android:name=".WritingActivity" />
         <activity android:name=".Login.StartActivity">
             <intent-filter>
@@ -27,5 +27,9 @@
         <activity android:name=".Home1.PostviewActivity" />
         <activity android:name=".Home2.PostviewActivity2" />
         <activity android:name=".Home1.ImageviewActivity" />
+        <activity android:name=".Category.CategoryActivity" />
+        <activity android:name=".Category.PostInCategory1Activity" />
+        <activity android:name=".Category.PostInCategory2Activity" />
+        <activity android:name=".Setting.LikesListActivity" />
     </application>
 </manifest>

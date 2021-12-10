@@ -1,5 +1,7 @@
 package com.example.gamjamarket.Home1;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.gamjamarket.Category.CategoryActivity;
+import com.example.gamjamarket.Category.PostInCategory1Activity;
+import com.example.gamjamarket.Category.PostInCategory2Activity;
 import com.example.gamjamarket.Model.CategoryModel;
 import com.example.gamjamarket.R;
 
@@ -15,10 +21,11 @@ import java.util.ArrayList;
 
 public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapter.ViewHolder>{
     private static final String TAG = "HomeCategoryAdapter";
+    private static ArrayList<CategoryModel> categoryList;
+    private static String CATEGORY;
 
-    private ArrayList<CategoryModel> categoryList;
-
-    public HomeCategoryAdapter(ArrayList mArraylist){
+    public HomeCategoryAdapter(String category, ArrayList mArraylist){
+        CATEGORY = category;
         categoryList = (ArrayList<CategoryModel>)mArraylist;
     }
 
@@ -33,7 +40,29 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
+                    if(categoryList.get(getAdapterPosition()).getId().equals("more")){
+                        Intent categoryActivity = new Intent(v.getContext(), CategoryActivity.class);
+                        categoryActivity.putExtra("category", CATEGORY);
+                        v.getContext().startActivity(categoryActivity);
 
+                    }
+                    else{
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("category", categoryList.get(getAdapterPosition()));
+                        if(CATEGORY.equals("categories")){
+                            Intent postInCategory = new Intent(v.getContext(), PostInCategory1Activity.class);
+                            postInCategory.putExtras(bundle);
+                            v.getContext().startActivity(postInCategory);
+                        }
+                        else if(CATEGORY.equals("categories2")){
+                            Intent postInCategory = new Intent(v.getContext(), PostInCategory2Activity.class);
+                            postInCategory.putExtras(bundle);
+                            v.getContext().startActivity(postInCategory);
+                        }
+                        else{
+                            Log.e(TAG, "");
+                        }
+                    }
                 }
             });
             categoryName = (TextView) v.findViewById(R.id.categoryitem_textview);

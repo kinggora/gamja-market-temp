@@ -222,7 +222,7 @@ public class MessageActivity extends AppCompatActivity {
             //내가보낸 메세지
             if(comments.get(position).uid.equals(uid)) {
                 messageViewHolder.textView_message_right.setText(comments.get(position).message);
-                messageViewHolder.textView_message_right.setBackgroundResource(R.drawable.rightbubble);
+                //messageViewHolder.textView_message_right.setBackgroundResource(R.drawable.rightbubble);
                 messageViewHolder.textView_message_right.setVisibility(View.VISIBLE);
                 messageViewHolder.textView_message_left.setVisibility(View.INVISIBLE);
                 messageViewHolder.linearLayout_destination.setVisibility(View.INVISIBLE);

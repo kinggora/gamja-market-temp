@@ -1,21 +1,30 @@
 package com.example.gamjamarket.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gamjamarket.Category.CategoryActivity;
+import com.example.gamjamarket.Category.PostInCategory1Activity;
 import com.example.gamjamarket.Home1.HomeCategoryAdapter;
 import com.example.gamjamarket.Home1.HomePostAdapter;
+import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.Model.CategoryModel;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
+import com.example.gamjamarket.Setting.LikesListActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,8 +43,14 @@ import java.util.Date;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
+    private static boolean loaded = false;
+    private static final int CATEGORY_NUM = 5; //보여줄 카테고리 개수
+    private static final String BOARD = "board1";
+    private static final String CATEGORY = "categories";
+
     private HomeCategoryAdapter categoryAdapter;
     private HomePostAdapter postAdapter;
+    private RecyclerView postListView;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String uid = mAuth.getCurrentUser().getUid();
@@ -44,15 +59,21 @@ public class HomeFragment extends Fragment {
     private ArrayList<CategoryModel> categoryList = new ArrayList<CategoryModel>();
     private ArrayList<PostlistItem> postList = new ArrayList<PostlistItem>();
 
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         RecyclerView categoryListView = (RecyclerView) view.findViewById(R.id.homeactivity_category);
-        RecyclerView postListView = (RecyclerView) view.findViewById(R.id.homeactivity_postlist);
+        postListView = (RecyclerView) view.findViewById(R.id.homeactivity_postlist);
 
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(inflater.getContext(), LinearLayoutManager.HORIZONTAL, false);
         categoryListView.setLayoutManager(horizontalLayoutManager);
-        categoryAdapter = new HomeCategoryAdapter(categoryList);
+        categoryAdapter = new HomeCategoryAdapter(CATEGORY, categoryList);
         categoryListView.setAdapter(categoryAdapter);
 
         LinearLayoutManager verticalLayoutManager
@@ -67,7 +88,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void getCategorySet() {
-        db.collection("categories").orderBy("index")
+        db.collection(CATEGORY).orderBy("index").whereLessThanOrEqualTo("index", CATEGORY_NUM)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
@@ -81,21 +102,22 @@ public class HomeFragment extends Fragment {
                                 CategoryModel model = new CategoryModel(document.getId(), document.getString("name"));
                                 categoryList.add(model);
                             }
-                            categoryAdapter.notifyDataSetChanged();
                         }
+                        categoryList.add(new CategoryModel("more", "더보기"));
+                        categoryAdapter.notifyDataSetChanged();
                     }
                 });
     }
 
     public void getPostSet() {
-        postList.clear();
         DocumentReference userDoc = db.collection("users").document(uid);
         userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     String dongcode = documentSnapshot.getString("dongcode");
-                    db.collection("board1").whereEqualTo("dongcode", dongcode).orderBy("createdAt", Query.Direction.DESCENDING)
+                    setActionbarTitle(documentSnapshot.getString("dongname"));
+                    db.collection(BOARD).whereEqualTo("dongcode", dongcode).orderBy("createdAt", Query.Direction.DESCENDING)
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
@@ -139,9 +161,55 @@ public class HomeFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
+        if (!loaded) {
+            loaded = true;
+        } else {
+            postList.clear();
+            postAdapter = new HomePostAdapter(postList, getActivity());
+            postListView.setAdapter(postAdapter);
+        }
         getPostSet();
     }
 
+
+    public void onCreateOption(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.action_search :
+                Intent categoryActivity = new Intent(getContext(), CategoryActivity.class);
+                categoryActivity.putExtra("category", CATEGORY);
+                getContext().startActivity(categoryActivity);
+                return true;
+            case R.id.action_like :
+                Intent likeslistActivity = new Intent(getContext(), LikesListActivity.class);
+                likeslistActivity.putExtra("init", 1);
+                getContext().startActivity(likeslistActivity);
+                return true;
+
+        }
+        return false;
+    }
+
+    public void setActionbarTitle(String dongname){
+        String[] strings = dongname.split(" ");
+
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            ((MainActivity) activity).setActionBarTitle(strings[strings.length-1]);
+        }
+    }
+
+    public String getBoard(){
+        return BOARD;
+    }
+
+    public String getCategory(){
+        return CATEGORY;
+    }
 
 }
 

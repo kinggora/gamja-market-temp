@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.gamjamarket.Home1.PostviewActivity;
 import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
@@ -47,12 +47,10 @@ public class MessageActivity extends AppCompatActivity {
     private static final String TAG = "MessageActivity";
 
     private String destinationUid;
-    private ImageView button;
+    private Button button;
     private EditText editText;
     private String productImage;
     private String productName;
-    private String boardNum;
-    private String productPid;
     private ImageView imageView_pImage;
     private TextView textView_pTitle;
     private LinearLayout linearLayoutProduct;
@@ -79,29 +77,23 @@ public class MessageActivity extends AppCompatActivity {
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //채팅을 요구하는 아이디
         destinationUid = getIntent().getStringExtra("destinationUid");
-        productImage = getIntent().getStringExtra("productImage");
-        productName = getIntent().getStringExtra("productName");
-        productPid = getIntent().getStringExtra("productPid");
-        boardNum = getIntent().getStringExtra("boardNum");
+        //productImage = getIntent().getStringExtra("productImage");
+        //productName = getIntent().getStringExtra("productName");
+        productImage = "https://firebasestorage.googleapis.com/v0/b/gamjamarket-1b94d.appspot.com/o/images%2FPzag23QtI6gY4CjVZKRQOfftHuy2?alt=media&token=e0481e31-8a42-4a7b-a8d3-6c7a140da5e4";
+        productName = "감자";
         linearLayoutProduct = (LinearLayout)findViewById(R.id.messageActivity_LinearLayout);
-        button = (ImageView)findViewById(R.id.messageActivity_button);
+        button = (Button)findViewById(R.id.messageActivity_button);
         editText = (EditText)findViewById(R.id.messageActivity_editText);
         imageView_pImage = (ImageView) findViewById(R.id.messageActivity_toolbar_image);
         textView_pTitle = (TextView) findViewById(R.id.messageActivity_toolbar_title);
         textView_pTitle.setText(productName);
         recyclerView = (RecyclerView)findViewById(R.id.messageActivity_recyclerview);
-        Glide.with(this)
-                .load(productImage)
-                .into(imageView_pImage);
         linearLayoutProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //제품상세페이지로이동
                 Intent intent = new Intent(v.getContext(), PostviewActivity.class);
-                String pid = productPid;
-                Bundle bundle = new Bundle();
-                bundle.putString("pid", pid);
-                intent.putExtras(bundle);
+                //intent.putExtra("destinationUid", destinationUsers.get(position));
                 startActivity(intent);
             }
         });
@@ -117,6 +109,16 @@ public class MessageActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             checkChatRoom();
+                        }
+                    });
+                    //post정보추가(toolbar)
+                    PostlistItem postlistItem = new PostlistItem();
+                    postlistItem.setTitle(productName);
+                    postlistItem.setContents(productImage);
+                    mDatabase.child("chatrooms").child(destinationUid).child("post").setValue(postlistItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
                         }
                     });
                 }else {
@@ -161,18 +163,6 @@ public class MessageActivity extends AppCompatActivity {
                         button.setEnabled(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(MessageActivity.this));
                         recyclerView.setAdapter(new RecyclerViewAdapter());
-                        //post정보추가(toolbar)
-                        PostlistItem postlistItem = new PostlistItem();
-                        postlistItem.setTitle(productName);
-                        postlistItem.setContents(productImage);
-                        postlistItem.setBoardNum(boardNum);
-                        postlistItem.setPid(productPid);
-                        mDatabase.child("chatrooms").child(chatRoomUid).child("post").setValue(postlistItem).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-
-                            }
-                        });
                     }
                 }
             }

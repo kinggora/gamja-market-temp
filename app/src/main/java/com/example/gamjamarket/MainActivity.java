@@ -3,6 +3,9 @@ package com.example.gamjamarket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -65,11 +68,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void setActionBarTitle(String title) {
+    public View setActionBarTitle(String title) {
         ActionBar actionBar = getSupportActionBar();
+        TextView toolbarTitle = (TextView)findViewById(R.id.likelist_toolbar_title);
         if (actionBar != null) {
-            actionBar.setTitle(title);
+            actionBar.setTitle("");
+            toolbarTitle.setText(title);
         }
+        return toolbarTitle;
     }
 
     public void onBackPressed() {

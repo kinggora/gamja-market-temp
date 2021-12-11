@@ -14,11 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.gamjamarket.Chat.MessageActivity;
 import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
-import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -35,12 +33,12 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
-public class ChatFragment extends Fragment {
+public class ChatFragment2 extends Fragment {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
-    public static ChatFragment newInstance() {
-        return new ChatFragment();
+    public static ChatFragment2 newInstance() {
+        return new ChatFragment2();
     }
 
     @Nullable
@@ -55,21 +53,15 @@ public class ChatFragment extends Fragment {
 
     class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private List<ChatModel> chatModels = new ArrayList<>();
-        private List<ChatModel> chatModels2 = new ArrayList<>();
         private String uid;
         private ArrayList<String> destinationUsers = new ArrayList<>();
-        private String productImage;
         public ChatRecyclerViewAdapter(){
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     chatModels.clear();
-                    for (DataSnapshot item: snapshot.getChildren()) {
-                        chatModels.add(item.getValue(ChatModel.class));
-                    }
-                    notifyDataSetChanged();
-                    /*FirebaseDatabase.getInstance().getReference().child("chatrooms").child("post").orderByChild("boardNam").equalTo("board1").addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("chatrooms").child("post").orderByChild("boardNam").equalTo("board2").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for (DataSnapshot item: snapshot.getChildren()) {
@@ -82,7 +74,7 @@ public class ChatFragment extends Fragment {
                         public void onCancelled(@NonNull DatabaseError error) {
 
                         }
-                    });*/
+                    });
                 }
 
                 @Override
@@ -110,19 +102,6 @@ public class ChatFragment extends Fragment {
                     destinationUsers.add(destinationUid);
                 }
             }
-            FirebaseDatabase.getInstance().getReference().child("chatrooms").child(destinationUid).child("post").addListenerForSingleValueEvent(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    PostlistItem postlistItem = snapshot.getValue(PostlistItem.class);
-                    productImage = postlistItem.getContents();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
             FirebaseDatabase.getInstance().getReference().child("users").child(destinationUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -159,9 +138,6 @@ public class ChatFragment extends Fragment {
             long unixTime = (long) chatModels.get(position).comments.get(lastMessageKey).timestamp;
             Date date = new Date(unixTime);
             customViewHolder.textView_timestamp.setText(simpleDateFormat.format(date));
-            Glide.with(getActivity())
-                    .load(productImage)
-                    .into(customViewHolder.imageView_product);
         }
 
         @Override

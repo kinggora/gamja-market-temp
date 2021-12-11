@@ -15,14 +15,12 @@
         <activity android:name=".Login.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".Login.RegisterActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".Chat.MessageActivity" />
         <activity android:name=".Login.DongRegisterActivity" />
         <activity android:name=".Home1.PostviewActivity" />
         <activity android:name=".Home2.PostviewActivity2" />

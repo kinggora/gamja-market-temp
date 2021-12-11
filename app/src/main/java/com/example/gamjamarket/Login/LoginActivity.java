@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,14 +26,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends Activity {
-    private static final String TAG = "Login";
+    private static final String TAG = "LoginActivity";
 
     private FirebaseAuth mAuth;
     private EditText editEmail;
     private EditText editPassword;
     private Button btnLogin;
-    private Button btnRegister;
-    //private Bundle bundle;
+
+    private TextView registerTextview;
+    private TextView findIdTextview;
+    private TextView findPasswordTextview;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,20 +51,44 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                 String email = editEmail.getText().toString();
                 String password = editPassword.getText().toString();
-                signIn(email, password);
 
+                ProfileVerifier verifier = new ProfileVerifier(getApplicationContext());
+                if(verifier.verifyProfile(email, password)){
+                    signIn(email, password);
+                }
             }
         });
 
-        btnRegister = (Button) findViewById(R.id.btn_register);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        registerTextview = (TextView) findViewById(R.id.login_register);
+        registerTextview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(registerIntent);
             }
         });
+
+
+        findIdTextview = (TextView)findViewById(R.id.login_findid);
+        findIdTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FindIdPasswordDialog findID = new FindIdPasswordDialog(LoginActivity.this);
+                findID.callEmailDialog();
+            }
+        });
+
+        findPasswordTextview = (TextView)findViewById(R.id.login_findpass);
+        findPasswordTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FindIdPasswordDialog findID = new FindIdPasswordDialog(LoginActivity.this);
+                findID.callPasswordDialog();
+            }
+        });
     }
+
+
 
     public void onStart() {
         super.onStart();

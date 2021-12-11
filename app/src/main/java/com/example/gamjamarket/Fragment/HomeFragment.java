@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ import com.example.gamjamarket.Category.CategoryActivity;
 import com.example.gamjamarket.Category.PostInCategory1Activity;
 import com.example.gamjamarket.Home1.HomeCategoryAdapter;
 import com.example.gamjamarket.Home1.HomePostAdapter;
+import com.example.gamjamarket.Login.DongRegisterActivity;
 import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.Model.CategoryModel;
 import com.example.gamjamarket.Model.PostlistItem;
@@ -196,11 +198,19 @@ public class HomeFragment extends Fragment {
 
     public void setActionbarTitle(String dongname){
         String[] strings = dongname.split(" ");
-
+        TextView titleView;
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            ((MainActivity) activity).setActionBarTitle(strings[strings.length-1]);
+            titleView = (TextView)((MainActivity) activity).setActionBarTitle(strings[strings.length-1]);
+            titleView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent dongRegisterActivity = new Intent(getContext(), DongRegisterActivity.class);
+                    getContext().startActivity(dongRegisterActivity);
+                }
+            });
         }
+
     }
 
     public String getBoard(){

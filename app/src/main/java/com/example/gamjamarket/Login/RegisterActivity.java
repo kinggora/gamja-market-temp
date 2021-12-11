@@ -31,12 +31,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 //이메일, 패스워드를 통한 로그인
 public class RegisterActivity extends Activity {
-    private static final String TAG = "Register";
+    private static final String TAG = "RegisterActivity";
     private FirebaseAuth mAuth;
 
     private EditText editName;
@@ -151,7 +149,8 @@ public class RegisterActivity extends Activity {
 
                 user = new User(email, name, nickname, phone);
 
-                if(verifyProfile(email, password, password2, name, nickname) && phoneAuth){
+                ProfileVerifier verifier = new ProfileVerifier(getApplicationContext());
+                if(verifier.verifyProfile(email, password, password2, name, nickname) && phoneAuth){
                     createAccount(email, password);
                 }
                 else{
@@ -182,8 +181,8 @@ public class RegisterActivity extends Activity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            userModel.nickname = editNickname.getText().toString();
-                                            userModel.uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                            userModel.setNickname(editNickname.getText().toString());
+                                            userModel.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
                                             FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(userModel);
                                             Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                                             startActivity(loginIntent);
@@ -202,65 +201,6 @@ public class RegisterActivity extends Activity {
                         }
                     }
                 });
-    }
-
-    private boolean verifyProfile(String mEmail, String mPassword, String mPassword2, String mName, String mNickname){
-        //항목 미기입
-        if(mEmail.length() == 0 || mPassword.length() == 0 || mPassword2.length() == 0 || mName.length() == 0 || mNickname.length() == 0){
-            Toast.makeText(RegisterActivity.this,"작성하지 않은 항목이 있습니다.",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        //이메일 유효성
-        String Rule = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
-
-        Pattern p = Pattern.compile(Rule);
-        Matcher m = p.matcher(mEmail);
-        if(!m.matches()) {
-            Toast.makeText(RegisterActivity.this,"이메일 양식이 올바르지 않습니다.",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        //비밀번호 유효성 (문자 1개/숫자 1개 이상 포함, 최소 8/최대 16글자, 정의된 특수문자 가능
-        Rule = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$";
-        p = Pattern.compile(Rule);
-        m = p.matcher(mPassword);
-        if(!m.matches()) {
-            Toast.makeText(RegisterActivity.this,"비밀번호 양식이 올바르지 않습니다.",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        //비밀번호 유효성2
-        if(!mPassword.equals(mPassword2)){
-            Toast.makeText(RegisterActivity.this,"비밀번호가 일치하지 않습니다.",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        //이름 유효성 (한글만)
-        Rule = "^[가-힣]*$";
-        p = Pattern.compile(Rule);
-        m = p.matcher(mName);
-        if(!m.matches()) {
-            Toast.makeText(RegisterActivity.this,"이름이 올바르지 않습니다.",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        //닉네임 유효성 (한글, 영문, 숫자, ._- 허용, 2자 이상
-        Rule = "^[가-힣ㄱ-ㅎa-zA-Z0-9._-]{2,}$";
-        p = Pattern.compile(Rule);
-        m = p.matcher(mNickname);
-        if(!m.matches()) {
-            Toast.makeText(RegisterActivity.this,"닉네임이 올바르지 않습니다.",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        return true;
     }
 
     private void startPhoneNumberVerification(String phoneNumber) {

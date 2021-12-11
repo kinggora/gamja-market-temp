@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gamjamarket.Home1.PostviewActivity;
 import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
-import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -112,15 +111,15 @@ public class MessageActivity extends AppCompatActivity {
                         }
                     });
                     //post정보추가(toolbar)
-                    PostlistItem postlistItem = new PostlistItem();
-                    postlistItem.setTitle(productName);
-                    postlistItem.setContents(productImage);
-                    mDatabase.child("chatrooms").child(destinationUid).child("post").setValue(postlistItem).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
+                    //PostlistItem postlistItem = new PostlistItem();
+                    //postlistItem.setTitle(productName);
+                    //postlistItem.setContents(productImage);
+//                    mDatabase.child("chatrooms").child(destinationUid).child("post").setValue(postlistItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//
+//                        }
+//                    });
                 }else {
                     ChatModel.Comment comment = new ChatModel.Comment();
                     comment.uid = uid;
@@ -268,7 +267,7 @@ public class MessageActivity extends AppCompatActivity {
                         .into(messageViewHolder.imageview_profile);*/
                 messageViewHolder.textview_name.setText(userModel.getNickname());
                 messageViewHolder.linearLayout_destination.setVisibility(View.VISIBLE);
-                messageViewHolder.textView_message_left.setBackgroundResource(R.drawable.leftbubble);
+                //messageViewHolder.textView_message_left.setBackgroundResource(R.drawable.leftbubble);
                 messageViewHolder.textView_message_left.setText(comments.get(position).message);
                 messageViewHolder.textView_message_left.setTextSize(25);
                 messageViewHolder.textView_message_left.setVisibility(View.VISIBLE);

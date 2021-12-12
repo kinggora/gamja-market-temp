@@ -14,20 +14,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gamjamarket.Fragment.ChatFragment;
-import com.example.gamjamarket.Home2.Home2Fragment;
 import com.example.gamjamarket.Fragment.HomeFragment;
+import com.example.gamjamarket.Home2.Home2Fragment;
+import com.example.gamjamarket.Info.InfoActivity;
 import com.example.gamjamarket.Setting.BackKeyHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
 public class MainActivity extends AppCompatActivity {
     private BackKeyHandler backKeyHandler = new BackKeyHandler(this);
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar tb = (Toolbar) findViewById(R.id.app_toolbar) ;
+        Toolbar tb = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(tb);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new HomeFragment()).commit();
@@ -46,17 +45,18 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(writingActivity);
                     return true;
                 case R.id.action_chat:
-                    getFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();
                     return true;
                 case R.id.action_info:
                     //getFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();
+                    Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                    startActivity(intent);
                     return true;
             }
 
             return false;
         });
     }
-
     public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -82,4 +82,4 @@ public class MainActivity extends AppCompatActivity {
         backKeyHandler.onBackPressed("\'뒤로\' 버튼을 두 번 누르면 종료됩니다.", 2);
     }
 
-}
+    }

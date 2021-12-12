@@ -7,7 +7,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +46,7 @@ public class MessageActivity extends AppCompatActivity {
     private static final String TAG = "MessageActivity";
 
     private String destinationUid;
-    private Button button;
+    private ImageView button;
     private EditText editText;
     private String productImage;
     private String productName;
@@ -77,12 +76,10 @@ public class MessageActivity extends AppCompatActivity {
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //채팅을 요구하는 아이디
         destinationUid = getIntent().getStringExtra("destinationUid");
-        //productImage = getIntent().getStringExtra("productImage");
-        //productName = getIntent().getStringExtra("productName");
-        productImage = "https://firebasestorage.googleapis.com/v0/b/gamjamarket-1b94d.appspot.com/o/images%2FPzag23QtI6gY4CjVZKRQOfftHuy2?alt=media&token=e0481e31-8a42-4a7b-a8d3-6c7a140da5e4";
-        productName = "감자";
+        productImage = getIntent().getStringExtra("productImage");
+        productName = getIntent().getStringExtra("productName");
         linearLayoutProduct = (LinearLayout)findViewById(R.id.messageActivity_LinearLayout);
-        button = (Button)findViewById(R.id.messageActivity_button);
+        button = (ImageView)findViewById(R.id.messageActivity_button);
         editText = (EditText)findViewById(R.id.messageActivity_editText);
         imageView_pImage = (ImageView) findViewById(R.id.messageActivity_toolbar_image);
         textView_pTitle = (TextView) findViewById(R.id.messageActivity_toolbar_title);

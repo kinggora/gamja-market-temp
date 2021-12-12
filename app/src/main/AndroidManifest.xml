@@ -21,6 +21,11 @@
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".Login.RegisterActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".Info.InfoActivity" />
+        <activity android:name=".Info.InfoModifyActivity"
+            android:parentActivityName=".Info.InfoActivity"/>
+        <activity android:name=".Info.PasswordModifyActivity"
+            android:parentActivityName=".Info.InfoActivity"/>
         <activity android:name=".Login.DongRegisterActivity" />
         <activity android:name=".Home1.PostviewActivity" />
         <activity android:name=".Home2.PostviewActivity2" />

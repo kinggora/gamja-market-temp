@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.gamjamarket.Fragment.ChatFragment;
+import com.example.gamjamarket.Fragment.ChatParentFragment;
 import com.example.gamjamarket.Fragment.HomeFragment;
 import com.example.gamjamarket.Home2.Home2Fragment;
 import com.example.gamjamarket.Info.InfoFragment;
@@ -46,11 +46,9 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(writingActivity);
                     return true;
                 case R.id.action_chat:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();
+                    replaceFragment(new ChatParentFragment());
                     return true;
                 case R.id.action_info:
-//                    Intent myitemActivity = new Intent(MainActivity.this, MyItemActivity.class);
-//                    startActivity(myitemActivity);
                     replaceFragment(new InfoFragment());
                     return true;
             }

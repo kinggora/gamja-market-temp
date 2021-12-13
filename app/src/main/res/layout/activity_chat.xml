@@ -3,29 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/chatActivity_tab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/chatActivity_Item_barter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="물물교환" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/chatActivity_Item_donation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="기부" />
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        app:tabMode="fixed"
+        app:tabGravity="fill">
 
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/chatActivity_viewpager"
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_below="@id/chatActivity_tab"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
+
 </LinearLayout>

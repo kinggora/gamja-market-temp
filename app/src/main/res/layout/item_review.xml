@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="150dp"
+    android:layout_margin="20dp">
+    <ImageView
+        android:layout_margin="5dp"
+        android:src="@drawable/moonface"
+        android:id="@+id/reviewitem_imageview"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/reviewitem_imageview"
+        android:id="@+id/reviewitem_nickname"
+        android:text="닉네임"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <RatingBar
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/reviewitem_ratingbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Holo.Light.RatingBar.Indicator"/>
+    <TextView
+        android:layout_margin="10dp"
+        android:layout_below="@+id/reviewitem_imageview"
+        android:id="@+id/reviewitem_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="리뷰"/>
+</RelativeLayout>

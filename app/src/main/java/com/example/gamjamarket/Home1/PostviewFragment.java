@@ -1,12 +1,12 @@
 package com.example.gamjamarket.Home1;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -32,6 +32,7 @@ public class PostviewFragment extends Fragment {
         TextView dongname = view.findViewById(R.id.post_dongnameTextview);
         TextView explain = view.findViewById(R.id.post_explainTextview);
         TextView category = view.findViewById(R.id.post_categoryTextview);
+        LinearLayout sellerInfo = view.findViewById(R.id.post_sellerinfo);
 
         Glide.with(getActivity())
                 .load(model.getContents())
@@ -55,6 +56,18 @@ public class PostviewFragment extends Fragment {
                 bundle.putString("contents", model.getContents());
                 imageviewActivity.putExtras(bundle);
                 v.getContext().startActivity(imageviewActivity);
+            }
+        });
+
+        //판매자info액티비티로 이동
+        sellerInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ProfileActivity = new Intent(v.getContext(), com.example.gamjamarket.Info.ProfileActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("uid", null);
+                ProfileActivity.putExtras(bundle);
+                v.getContext().startActivity(ProfileActivity);
             }
         });
 

@@ -8,35 +8,28 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gamjamarket.Home1.HomeCategoryAdapter;
 import com.example.gamjamarket.Home1.HomePostAdapter;
-import com.example.gamjamarket.Home2.Home2PostAdapter;
-import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class LikesListFragment1 extends Fragment {
-    private static final String TAG = "LikesListFragment1";
+    private static final String TAG = "LikesListFragment";
     private static boolean loaded = false;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -48,9 +41,9 @@ public class LikesListFragment1 extends Fragment {
     private ArrayList<PostlistItem> postList = new ArrayList<PostlistItem>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_likeslist, container, false);
+        View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
-        likesListView = (RecyclerView) view.findViewById(R.id.likeslist_view);
+        likesListView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         LinearLayoutManager verticalLayoutManager
                 = new LinearLayoutManager(inflater.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -77,6 +70,8 @@ public class LikesListFragment1 extends Fragment {
                                         .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                             @Override
                                             public void onEvent(DocumentSnapshot ds, FirebaseFirestoreException error) {
+                                                //postList.clear();
+
                                                 if (error != null) {
                                                     Log.e("Firestore error", error.getMessage());
                                                     return;
@@ -87,12 +82,14 @@ public class LikesListFragment1 extends Fragment {
                                                     String wuid = ds.getString("uid");
                                                     String type = ds.getString("type");
                                                     String nickname = ds.getString("nickname");
-                                                    Date createdAt = ds.getDate("createAt");
+                                                    Date createdAt = ds.getDate("createdAt");
                                                     String pid = ds.getString("pid");
                                                     int likes = ds.getDouble("likes").intValue();
 
                                                     PostlistItem item = new PostlistItem(pid, title, contents, type, wuid, nickname, createdAt, likes);
                                                     postList.add(item);
+                                                } else if(!ds.exists()){
+                                                    db.collection("likes").document(uid).update("board1", FieldValue.arrayRemove(mpid));
                                                 }
                                                 postAdapter.notifyDataSetChanged();
                                             }

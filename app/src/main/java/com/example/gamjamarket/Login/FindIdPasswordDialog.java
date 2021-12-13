@@ -204,7 +204,7 @@ public class FindIdPasswordDialog {
             }
         });
 
-        Button btnFind = ((Dialog) dialog).findViewById(R.id.findpass_findBtn);
+        Button btnFind = ((Dialog) dialog).findViewById(R.id.selectuser_btn);
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,7 +298,7 @@ public class FindIdPasswordDialog {
 
     public void successFindEmail(String name, String email){
         dialog.setContentView(R.layout.popup_foundid);
-        ImageView exitImage = ((Dialog) dialog).findViewById(R.id.foundid_exit);
+        ImageView exitImage = ((Dialog) dialog).findViewById(R.id.myitem_exit);
         exitImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

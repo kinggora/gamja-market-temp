@@ -25,7 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHolder>{
     private static final String TAG = "HomePostsAdapter";
@@ -124,7 +126,9 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
         viewHolder.itemType.setText(postList.get(position).getType());
         viewHolder.itemNickname.setText(postList.get(position).getNickname());
         viewHolder.itemHeart.setText(Integer.toString(postList.get(position).getLikes()));
-        //viewHolder.itemDate.setText(postsList.get(position).getCreatedAt().toString());
+        Date regTime = postList.get(position).getCreatedAt();
+        TimeString ts = new TimeString();
+        viewHolder.itemDate.setText(ts.formatTimeString(regTime));
     }
 
     @Override
@@ -132,5 +136,6 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
         return (postList != null ? postList.size() : 0);
 
     }
+
 
 }

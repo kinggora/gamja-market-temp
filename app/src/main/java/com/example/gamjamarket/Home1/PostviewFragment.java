@@ -27,7 +27,6 @@ public class PostviewFragment extends Fragment {
         TextView time = view.findViewById(R.id.post_timeTextview);
         TextView viewsnum = view.findViewById(R.id.post_viewTextview);
         likesnum = view.findViewById(R.id.post_heartTextview);
-        TextView commentnum = view.findViewById(R.id.post_commentTextview);
         TextView nickname = view.findViewById(R.id.post_nicknameTextview);
         TextView postnum = view.findViewById(R.id.post_postnum);
         TextView dongname = view.findViewById(R.id.post_dongnameTextview);
@@ -45,6 +44,9 @@ public class PostviewFragment extends Fragment {
         category.setText(model.getCategory());
         likesnum.setText(Integer.toString(model.getLikes()));
         viewsnum.setText(Integer.toString(model.getViews()));
+
+        TimeString ts = new TimeString();
+        time.setText(ts.formatTimeString(model.getCreatedAt()));
 
         contentsImage.setOnClickListener(new View.OnClickListener() {
             @Override

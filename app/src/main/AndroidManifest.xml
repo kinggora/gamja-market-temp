@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:networkSecurityConfig="@xml/network_config">
-        <activity android:name=".WritingActivity" />
+        <activity android:name=".Writing.WritingActivity" />
         <activity android:name=".Login.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,5 +34,7 @@
         <activity android:name=".Category.PostInCategory1Activity" />
         <activity android:name=".Category.PostInCategory2Activity" />
         <activity android:name=".Setting.LikesListActivity" />
+        <activity android:name=".Setting.MyItemActivity"/>
+        <activity android:name=".Category.SearchResultActivity"/>
     </application>
 </manifest>

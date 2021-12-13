@@ -78,6 +78,9 @@ public class MessageActivity extends AppCompatActivity {
         destinationUid = getIntent().getStringExtra("destinationUid");
         productImage = getIntent().getStringExtra("productImage");
         productName = getIntent().getStringExtra("productName");
+        productImage = "https://firebasestorage.googleapis.com/v0/b/gamjamarket-1b94d.appspot.com/o/images%2FPzag23QtI6gY4CjVZKRQOfftHuy2?alt=media&token=e0481e31-8a42-4a7b-a8d3-6c7a140da5e4";
+        productName = "감자";
+
         linearLayoutProduct = (LinearLayout)findViewById(R.id.messageActivity_LinearLayout);
         button = (ImageView)findViewById(R.id.messageActivity_button);
         editText = (EditText)findViewById(R.id.messageActivity_editText);

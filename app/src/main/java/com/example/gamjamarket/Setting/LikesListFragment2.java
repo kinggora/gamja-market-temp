@@ -11,17 +11,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gamjamarket.Home1.HomePostAdapter;
-import com.example.gamjamarket.Home2.Home2PostAdapter;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
@@ -42,9 +40,9 @@ public class LikesListFragment2 extends Fragment {
     private ArrayList<PostlistItem> postList = new ArrayList<PostlistItem>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_likeslist, container, false);
+        View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
-        likesListView = (RecyclerView) view.findViewById(R.id.likeslist_view);
+        likesListView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         LinearLayoutManager verticalLayoutManager
                 = new LinearLayoutManager(inflater.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -70,6 +68,7 @@ public class LikesListFragment2 extends Fragment {
                                         .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                             @Override
                                             public void onEvent(DocumentSnapshot ds, FirebaseFirestoreException error) {
+                                                postList.clear();
                                                 if (error != null) {
                                                     Log.e("Firestore error", error.getMessage());
                                                     return;
@@ -85,6 +84,9 @@ public class LikesListFragment2 extends Fragment {
 
                                                     PostlistItem item = new PostlistItem(pid, title, contents, wuid, nickname, createdAt, callnumber);
                                                     postList.add(item);
+                                                }
+                                                else if(!ds.exists()){
+                                                    db.collection("likes").document(uid).update("board2", FieldValue.arrayRemove(mpid));
                                                 }
                                                 postAdapter.notifyDataSetChanged();
                                             }
@@ -109,7 +111,6 @@ public class LikesListFragment2 extends Fragment {
         if (!loaded) {
             loaded = true;
         } else {
-            postList.clear();
             postAdapter = new LikesList2Adapter(postList, getActivity());
             likesListView.setAdapter(postAdapter);
         }

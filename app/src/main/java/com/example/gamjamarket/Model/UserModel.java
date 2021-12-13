@@ -5,6 +5,7 @@ public class UserModel {
     public String profileImageUrl;
     public String usernickname;
     public String uid;
+    public float ratingMean;
 
     public String getUsername(){
         return username;

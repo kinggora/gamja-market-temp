@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+    <ImageView
+        android:layout_margin="20dp"
+        android:id="@+id/profileActivity_imageview"
+        android:src="@drawable/moonface"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+    <TextView
+        android:id="@+id/profileActivity_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="닉네임"/>
+   <RatingBar
+        android:id="@+id/profileActivity_ratingbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Holo.RatingBar.Indicator"/>
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:id="@+id/profileActivity_product"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/white"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:text="판매자의 다른 상품 보기"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/arrow_right" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:id="@+id/profileActivity_review"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/white"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:text="거래 후기 보기"/>
+        <ImageView
+            android:layout_margin="10dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/arrow_right"/>
+    </LinearLayout>
+
+</LinearLayout>

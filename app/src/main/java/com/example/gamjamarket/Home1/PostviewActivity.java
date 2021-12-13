@@ -76,7 +76,7 @@ public class PostviewActivity extends FragmentActivity {
                         String wuid = document.getString("uid");
                         String type = document.getString("type");
                         String nickname = document.getString("nickname");
-                        Date createdAt = document.getDate("createAt");
+                        Date createdAt = document.getDate("createdAt");
                         String dongcode = document.getString("dongcode");
                         String dongname = document.getString("dongname");
                         String pid = document.getString("pid");

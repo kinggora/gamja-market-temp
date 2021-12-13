@@ -5,95 +5,126 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".WritingActivity">
+    tools:context=".Writing.WritingActivity">
 
-    <Toolbar
-        android:id="@+id/my_toolbar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/writing_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="35dp"></Toolbar>
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
     <LinearLayout
         android:id="@+id/toolbar_division"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white"
-        android:orientation="horizontal"></LinearLayout>
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/addphoto_imagelist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/addphoto_imageview"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/gallery"></ImageView>
-    </LinearLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/addphoto_imagelist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
 
-            <EditText
-                android:id="@+id/addphoto_edit_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="글 제목"></EditText>
-
-            <Button
-                android:id="@+id/categoryButton"
-                style="@android:style/Widget.DeviceDefault.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/addphoto_edit_title"
-                android:text="카테고리"
-                android:textAlignment="textStart"
-                android:textColor="#272727" />
-
-            <EditText
-                android:id="@+id/addphoto_edit_explain"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/addphoto_imageview"
+                android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_below="@+id/categoryButton"
-                android:layout_marginTop="10dp"
-                android:gravity="top"
-                android:hint="제품설명"></EditText>
-        </RelativeLayout>
-    </com.google.android.material.textfield.TextInputLayout>
+                android:src="@drawable/gallery"
+                app:srcCompat="?attr/actionBarDivider"></ImageView>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/typeCheckBox_0"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/addphoto_edit_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="직거래" />
+            android:layout_marginBottom="10dp"
+            android:maxLength="20"
+            android:hint="*상품명"
+            android:singleLine="true" />
 
-        <CheckBox
-            android:id="@+id/typeCheckBox_1"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/categoryButton"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="*카테고리 선택"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="거래방식"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/typeCheckBox_0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="직거래만" />
+
+                <RadioButton
+                    android:id="@+id/typeCheckBox_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="택배거래만" />
+
+                <RadioButton
+                    android:id="@+id/typeCheckBox_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="모두 가능" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/addphoto_edit_explain"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:text="택배거래" />
+            android:gravity="top"
+            android:hint="상품에 대한 설명을 상세히 적어주세요"></EditText>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/addphoto_btn_upload"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="Upload"></Button>
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/addphoto_btn_upload"
+            android:layout_width="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:text="등록하기"></Button>
+    </LinearLayout>
 
 </LinearLayout>

@@ -21,6 +21,7 @@ public class WriteinfoModel implements Serializable {
     private String pid; //게시글id
     //----------여기까지 object 생성시 초기화 필요---------------
 
+    private boolean onsale = true; //거래중=1, 거래완료=0
     private int likes = 0; //찜
     private int views = 0; //조회수
 
@@ -92,6 +93,8 @@ public class WriteinfoModel implements Serializable {
     public String getCallnumber(){ return callnumber;}
     public void setCallnumber(String callnumber){this.callnumber = callnumber;}
 
+    public boolean getOnsale(){ return onsale; }
+    public void setOnsale(boolean onsale){ this.onsale = onsale; }
     public int getLikes(){ return likes; }
     public void setLikes(int likes){ this.likes = likes; }
     public int getViews(){ return views; }

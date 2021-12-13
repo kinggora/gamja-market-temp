@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gamjamarket.Home1.PostviewActivity;
 import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
+import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -76,8 +77,8 @@ public class MessageActivity extends AppCompatActivity {
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //채팅을 요구하는 아이디
         destinationUid = getIntent().getStringExtra("destinationUid");
-        //productImage = getIntent().getStringExtra("productImage");
-        //productName = getIntent().getStringExtra("productName");
+        productImage = getIntent().getStringExtra("productImage");
+        productName = getIntent().getStringExtra("productName");
         productImage = "https://firebasestorage.googleapis.com/v0/b/gamjamarket-1b94d.appspot.com/o/images%2FPzag23QtI6gY4CjVZKRQOfftHuy2?alt=media&token=e0481e31-8a42-4a7b-a8d3-6c7a140da5e4";
         productName = "감자";
         linearLayoutProduct = (LinearLayout)findViewById(R.id.messageActivity_LinearLayout);
@@ -111,15 +112,15 @@ public class MessageActivity extends AppCompatActivity {
                         }
                     });
                     //post정보추가(toolbar)
-                    //PostlistItem postlistItem = new PostlistItem();
-                    //postlistItem.setTitle(productName);
-                    //postlistItem.setContents(productImage);
-//                    mDatabase.child("chatrooms").child(destinationUid).child("post").setValue(postlistItem).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//
-//                        }
-//                    });
+                    PostlistItem postlistItem = new PostlistItem();
+                    postlistItem.setTitle(productName);
+                    postlistItem.setContents(productImage);
+                    mDatabase.child("chatrooms").child(destinationUid).child("post").setValue(postlistItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
                 }else {
                     ChatModel.Comment comment = new ChatModel.Comment();
                     comment.uid = uid;

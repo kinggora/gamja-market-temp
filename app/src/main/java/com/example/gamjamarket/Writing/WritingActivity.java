@@ -1,15 +1,19 @@
- package com.example.gamjamarket;
+ package com.example.gamjamarket.Writing;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,10 +21,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.example.gamjamarket.Home1.PostviewActivity;
 import com.example.gamjamarket.Model.WriteinfoModel;
+import com.example.gamjamarket.R;
+import com.example.gamjamarket.Setting.MyItemFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,8 +53,9 @@ public class WritingActivity extends AppCompatActivity {
     private Button btnUpload;
     private ImageView addImage;
     private Uri imageUri;
-    private CheckBox typeCheck0;
-    private CheckBox typeCheck1;
+    private RadioButton typeCheck0;
+    private RadioButton typeCheck1;
+    private RadioButton typeCheck2;
     private ArrayList<String> pathList = new ArrayList<>();
     private LinearLayout parent;
     private int imageCount = 0;
@@ -63,6 +70,8 @@ public class WritingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
+        InitializationToolbar();
+
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         categoryBtn = (Button)findViewById(R.id.categoryButton);
@@ -87,8 +96,9 @@ public class WritingActivity extends AppCompatActivity {
             }
         });
 
-        typeCheck0 = (CheckBox)findViewById(R.id.typeCheckBox_0);
-        typeCheck1 = (CheckBox)findViewById(R.id.typeCheckBox_1);
+        typeCheck0 = (RadioButton)findViewById(R.id.typeCheckBox_0);
+        typeCheck1 = (RadioButton)findViewById(R.id.typeCheckBox_1);
+        typeCheck2 = (RadioButton)findViewById(R.id.typeCheckBox_2);
 
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +106,7 @@ public class WritingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 title = ((EditText) findViewById(R.id.addphoto_edit_title)).getText().toString();
                 explain = ((EditText) findViewById(R.id.addphoto_edit_explain)).getText().toString();
-                boolean typecheck = typeCheck0.isChecked() || typeCheck1.isChecked();
+                boolean typecheck = typeCheck0.isChecked() || typeCheck1.isChecked()||typeCheck2.isChecked();
                 if (title.length() > 0 && categoryIdx != 999 && typecheck) {
                     //ArrayList<String> contentsList = new ArrayList<>();
                     FirebaseStorage.getInstance().getReference().child("images").child(user.getUid()).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -263,13 +273,33 @@ public class WritingActivity extends AppCompatActivity {
     }
 
     public String getType(){
-        if(typeCheck0.isChecked() && typeCheck1.isChecked()){
-            return "직거래/택배";
-        }
-        else if(typeCheck0.isChecked()){
+        if(typeCheck0.isChecked()){
             return "직거래만";
+        }else if(typeCheck1.isChecked()){
+            return "택배거래만";
         }
-        return "택배거래만";
+        return "직거래/택배";
+    }
+
+    public void InitializationToolbar(){
+        Toolbar tb = (Toolbar)findViewById(R.id.writing_toolbar);
+        setSupportActionBar(tb);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("상품 등록하기");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        actionBar.show();
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

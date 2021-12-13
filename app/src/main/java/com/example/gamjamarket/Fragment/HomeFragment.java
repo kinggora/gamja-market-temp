@@ -27,6 +27,7 @@ import com.example.gamjamarket.Model.CategoryModel;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.example.gamjamarket.Setting.LikesListActivity;
+import com.example.gamjamarket.Setting.MyItemActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -119,10 +120,14 @@ public class HomeFragment extends Fragment {
                 if (documentSnapshot.exists()) {
                     String dongcode = documentSnapshot.getString("dongcode");
                     setActionbarTitle(documentSnapshot.getString("dongname"));
-                    db.collection(BOARD).whereEqualTo("dongcode", dongcode).orderBy("createdAt", Query.Direction.DESCENDING)
+                    db.collection(BOARD).whereEqualTo("dongcode", dongcode)
+                            .whereEqualTo("onsale", true)
+                            .orderBy("createdAt", Query.Direction.DESCENDING)
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
+                                    postList.clear();
+
                                     if (error != null) {
                                         Log.e("Firestore error", error.getMessage());
                                         return;
@@ -135,7 +140,7 @@ public class HomeFragment extends Fragment {
                                             String wuid = document.getString("uid");
                                             String type = document.getString("type");
                                             String nickname = document.getString("nickname");
-                                            Date createdAt = document.getDate("createAt");
+                                            Date createdAt = document.getDate("createdAt");
                                             String pid = document.getString("pid");
                                             int likes = document.getDouble("likes").intValue();
 
@@ -166,7 +171,6 @@ public class HomeFragment extends Fragment {
         if (!loaded) {
             loaded = true;
         } else {
-            postList.clear();
             postAdapter = new HomePostAdapter(postList, getActivity());
             postListView.setAdapter(postAdapter);
         }
@@ -188,8 +192,8 @@ public class HomeFragment extends Fragment {
                 return true;
             case R.id.action_like :
                 Intent likeslistActivity = new Intent(getContext(), LikesListActivity.class);
-                likeslistActivity.putExtra("init", 1);
                 getContext().startActivity(likeslistActivity);
+
                 return true;
 
         }

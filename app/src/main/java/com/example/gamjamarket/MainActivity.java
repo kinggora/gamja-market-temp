@@ -17,6 +17,8 @@ import com.example.gamjamarket.Fragment.ChatFragment;
 import com.example.gamjamarket.Home2.Home2Fragment;
 import com.example.gamjamarket.Fragment.HomeFragment;
 import com.example.gamjamarket.Setting.BackKeyHandler;
+import com.example.gamjamarket.Setting.MyItemActivity;
+import com.example.gamjamarket.Writing.WritingActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.action_info:
                     //getFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();
+                    Intent myitemActivity = new Intent(MainActivity.this, MyItemActivity.class);
+                    startActivity(myitemActivity);
                     return true;
             }
 

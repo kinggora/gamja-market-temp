@@ -167,7 +167,6 @@ public class Home2Fragment extends Fragment {
                 return true;
             case R.id.action_like :
                 Intent likeslistActivity = new Intent(getContext(), LikesListActivity.class);
-                likeslistActivity.putExtra("init", 2);
                 getContext().startActivity(likeslistActivity);
                 return true;
 

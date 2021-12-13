@@ -12,6 +12,7 @@ public class PostlistItem {
     private String pid; //게시글id
     private String callnumber;
     private int likes;
+    private String boardNum;
 
     //board1 게시물 생성자
     public PostlistItem(String pid, String title, String contents, String type, String uid, String nickname, Date createdAt, int likes) {
@@ -36,7 +37,10 @@ public class PostlistItem {
         this.callnumber = callnumber;
     }
 
-        public String getTitle () {
+    public PostlistItem() {
+    }
+
+    public String getTitle () {
             return title;
         }
         public void setTitle (String title){
@@ -99,5 +103,11 @@ public class PostlistItem {
             this.likes = likes;
         }
 
+    public String getBoardNum () {
+        return boardNum;
+    }
+    public void setBoardNum ( String boardNum){
+        this.boardNum = boardNum;
+    }
 
 }

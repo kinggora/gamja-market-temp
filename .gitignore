@@ -16,3 +16,5 @@ local.properties
 app/src/main/java/com/example/gamjamarket/Chat/MessageActivity.java
 app/src/main/java/com/example/gamjamarket/Chat/MessageActivity.java
 app/src/main/java/com/example/gamjamarket/MainActivity.java
+app/src/main/java/com/example/gamjamarket/Chat/MessageActivity.java
+app/src/main/java/com/example/gamjamarket/MainActivity.java

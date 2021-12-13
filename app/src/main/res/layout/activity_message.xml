@@ -8,7 +8,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:id="@+id/messageActivity_toolbar"
         android:background="@drawable/border"
         >
@@ -31,7 +31,8 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:text="상품명"
-                android:textSize="20sp" />
+                android:textSize="16dp"
+                android:textStyle="bold"/>
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
@@ -40,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/messageActivity_toolbar"
-        android:layout_above="@+id/messageActivity_button"
+        android:layout_above="@+id/messageActivity_RelativeLayout"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
@@ -48,21 +49,29 @@
         >
 
     </androidx.recyclerview.widget.RecyclerView>
-
-    <EditText
-        android:layout_toLeftOf="@+id/messageActivity_button"
+    <RelativeLayout
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/messageActivity_editText"
+        android:id="@+id/messageActivity_RelativeLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="60dp"
+        android:background="#ededed">
+        <EditText
 
-    <Button
-        android:id="@+id/messageActivity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="전송"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+            android:layout_toLeftOf="@+id/messageActivity_button"
+            android:layout_centerInParent="true"
+            android:id="@+id/messageActivity_editText"
+            android:layout_marginLeft="10dp"
+            android:layout_width="400dp"
+            android:layout_height="40dp"
+            android:background="#ffffff" />
+
+        <ImageView
+            android:id="@+id/messageActivity_button"
+            android:layout_width="64dp"
+            android:layout_height="32dp"
+            android:src="@drawable/send"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 
 </RelativeLayout>

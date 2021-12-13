@@ -7,7 +7,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +46,7 @@ public class MessageActivity extends AppCompatActivity {
     private static final String TAG = "MessageActivity";
 
     private String destinationUid;
-    private Button button;
+    private ImageView button;
     private EditText editText;
     private String productImage;
     private String productName;
@@ -79,10 +78,13 @@ public class MessageActivity extends AppCompatActivity {
         destinationUid = getIntent().getStringExtra("destinationUid");
         productImage = getIntent().getStringExtra("productImage");
         productName = getIntent().getStringExtra("productName");
+<<<<<<< HEAD
         productImage = "https://firebasestorage.googleapis.com/v0/b/gamjamarket-1b94d.appspot.com/o/images%2FPzag23QtI6gY4CjVZKRQOfftHuy2?alt=media&token=e0481e31-8a42-4a7b-a8d3-6c7a140da5e4";
         productName = "감자";
+=======
+>>>>>>> 1d66f25d0ee3510207d6d12feb8b5f9d82c558a4
         linearLayoutProduct = (LinearLayout)findViewById(R.id.messageActivity_LinearLayout);
-        button = (Button)findViewById(R.id.messageActivity_button);
+        button = (ImageView)findViewById(R.id.messageActivity_button);
         editText = (EditText)findViewById(R.id.messageActivity_editText);
         imageView_pImage = (ImageView) findViewById(R.id.messageActivity_toolbar_image);
         textView_pTitle = (TextView) findViewById(R.id.messageActivity_toolbar_title);
@@ -268,7 +270,7 @@ public class MessageActivity extends AppCompatActivity {
                         .into(messageViewHolder.imageview_profile);*/
                 messageViewHolder.textview_name.setText(userModel.getNickname());
                 messageViewHolder.linearLayout_destination.setVisibility(View.VISIBLE);
-                //messageViewHolder.textView_message_left.setBackgroundResource(R.drawable.leftbubble);
+                messageViewHolder.textView_message_left.setBackgroundResource(R.drawable.leftbubble);
                 messageViewHolder.textView_message_left.setText(comments.get(position).message);
                 messageViewHolder.textView_message_left.setTextSize(25);
                 messageViewHolder.textView_message_left.setVisibility(View.VISIBLE);

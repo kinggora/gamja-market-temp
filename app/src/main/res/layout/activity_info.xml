@@ -13,7 +13,7 @@
             android:layout_margin="10dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/user"/>
+            android:src="@drawable/moonface"/>
         <TextView
             android:layout_marginTop="10dp"
             android:id="@+id/infoActivity_textview_nicname"
@@ -29,14 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@android:style/Widget.Holo.RatingBar.Indicator"/>
-        <ImageView
-            android:onClick="onSlideViewButtonClick"
-            android:id="@+id/infoActivity_btn_arrowdown"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="15dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/arrowdown"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_below="@+id/infoActivity_relativeLaout1"

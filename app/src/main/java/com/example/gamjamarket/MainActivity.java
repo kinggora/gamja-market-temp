@@ -18,7 +18,6 @@ import com.example.gamjamarket.Fragment.HomeFragment;
 import com.example.gamjamarket.Home2.Home2Fragment;
 import com.example.gamjamarket.Info.InfoFragment;
 import com.example.gamjamarket.Setting.BackKeyHandler;
-import com.example.gamjamarket.Setting.MyItemActivity;
 import com.example.gamjamarket.Writing.WritingActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -50,13 +49,9 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();
                     return true;
                 case R.id.action_info:
-<<<<<<< HEAD
-                    //getFragmentManager().beginTransaction().replace(R.id.mainactivity_framelayout, new ChatFragment()).commit();
-                    Intent myitemActivity = new Intent(MainActivity.this, MyItemActivity.class);
-                    startActivity(myitemActivity);
-=======
+//                    Intent myitemActivity = new Intent(MainActivity.this, MyItemActivity.class);
+//                    startActivity(myitemActivity);
                     replaceFragment(new InfoFragment());
->>>>>>> 1d66f25d0ee3510207d6d12feb8b5f9d82c558a4
                     return true;
             }
 
@@ -76,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     public View setActionBarTitle(String title) {
         ActionBar actionBar = getSupportActionBar();
-        TextView toolbarTitle = (TextView)findViewById(R.id.likelist_toolbar_title);
+        TextView toolbarTitle = (TextView)findViewById(R.id.main_toolbar_title);
         if (actionBar != null) {
             actionBar.setTitle("");
             toolbarTitle.setText(title);

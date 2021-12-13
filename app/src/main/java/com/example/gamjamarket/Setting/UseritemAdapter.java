@@ -34,6 +34,7 @@ public class UseritemAdapter extends RecyclerView.Adapter<UseritemAdapter.ViewHo
     public UseritemAdapter(ArrayList mArraylist, Context context, SelectUserDialog dialog){
         userList = (ArrayList<UserModel>)mArraylist;
         this.context = context;
+        this.dialog = dialog;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,9 +77,8 @@ public class UseritemAdapter extends RecyclerView.Adapter<UseritemAdapter.ViewHo
 
     public void onBindViewHolder (UseritemAdapter.ViewHolder viewHolder, final int position){
         Log.d(TAG, "Element " + position + " set.");
-//        Glide.with(context)
-//                .load(userList.get(position).getProfileImageUrl())
-//                .into(viewHolder.itemImage);
+        ProfileImg profileImg = new ProfileImg();
+        viewHolder.itemImage.setImageResource(profileImg.getSrc(userList.get(position).getProfileImageUrl()));
         viewHolder.itemNickname.setText(userList.get(position).getUsernickname());
     }
 

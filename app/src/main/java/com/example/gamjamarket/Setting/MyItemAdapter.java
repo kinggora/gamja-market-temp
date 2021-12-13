@@ -41,10 +41,12 @@ public class MyItemAdapter extends RecyclerView.Adapter<com.example.gamjamarket.
     private static final String TAG = "MyItemAdapter";
 
     private static ArrayList<PostlistItem> postList;
+    private Boolean ONSALE;
     private Context context;
 
-    public MyItemAdapter(ArrayList mArraylist, Context context){
+    public MyItemAdapter(ArrayList mArraylist, Boolean onsale, Context context){
         postList = (ArrayList<PostlistItem>)mArraylist;
+        ONSALE = onsale;
         this.context = context;
     }
 
@@ -110,8 +112,14 @@ public class MyItemAdapter extends RecyclerView.Adapter<com.example.gamjamarket.
         viewHolder.itemPopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyItemDialog dialog = new MyItemDialog(context, postList.get(position));
-                dialog.callDialog();
+                if(ONSALE){
+                    MyItemDialog dialog = new MyItemDialog(context, postList.get(position));
+                    dialog.callDialog();
+                }
+                else{
+                    MyItemDialog2 dialog = new MyItemDialog2(context, postList.get(position));
+                    dialog.callDialog();
+                }
             }
         });
     }

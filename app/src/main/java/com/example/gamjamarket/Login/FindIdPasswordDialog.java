@@ -204,7 +204,7 @@ public class FindIdPasswordDialog {
             }
         });
 
-        Button btnFind = ((Dialog) dialog).findViewById(R.id.selectuser_btn);
+        Button btnFind = ((Dialog) dialog).findViewById(R.id.writereview_btn);
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -20,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.gamjamarket.Login.LoginActivity;
 import com.example.gamjamarket.Model.ChatModel;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.Model.UserModel;
@@ -37,10 +37,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class SelectUserDialog {
+    private static final String TAG = "SelectUserDialog";
     private Dialog dialog;
     private Context context;
     private PostlistItem postItem;
-    private ArrayList<UserModel> userList;
+    private ArrayList<UserModel> userList = new ArrayList<UserModel>();
     private UseritemAdapter adapter;
     private boolean selected = false;
     private int selectedPosition;
@@ -83,7 +84,9 @@ public class SelectUserDialog {
             @Override
             public void onClick(View v) {
                 if(selected){
-                    System.out.println(userList.get(selectedPosition).getUsername());
+                    ReviewWritingDialog newDialog = new ReviewWritingDialog(context, userList.get(selectedPosition));
+                    newDialog.callDialog();
+                    dialog.dismiss();
                 }
                 else{
                     Toast.makeText(context, "거래자를 선택하세요",
@@ -100,18 +103,18 @@ public class SelectUserDialog {
             }
         });
 
-        ImageView goodsImage = ((Dialog) dialog).findViewById(R.id.selectuser_itemcontents);
+        ImageView goodsImage = ((Dialog) dialog).findViewById(R.id.selectuser_userimage);
         Glide.with(context)
                 .load(postItem.getContents())
                 .into(goodsImage);
-        TextView goodsTitle = ((Dialog) dialog).findViewById(R.id.selectuser_itemtitle);
+        TextView goodsTitle = ((Dialog) dialog).findViewById(R.id.selectuser_usernickname);
         goodsTitle.setText(postItem.getTitle());
 
         RecyclerView userListview = ((Dialog) dialog).findViewById(R.id.selectuser_list);
         LinearLayoutManager verticalLayoutManager
                 = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         userListview.setLayoutManager(verticalLayoutManager);
-        adapter = new UseritemAdapter(userList ,context, this);
+        adapter = new UseritemAdapter(userList, context, this);
         userListview.setAdapter(adapter);
 
         setUserlist();
@@ -130,19 +133,23 @@ public class SelectUserDialog {
                         ChatModel chatModel = item.getValue(ChatModel.class);
                         for(String muid : chatModel.users.keySet()){
                             if(!muid.equals(uid)){
-                                fs.collection("users").document(muid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                fs.collection("users").document(muid)
+                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                         String nickname = documentSnapshot.getString("nickname");
+                                        String profileImg = documentSnapshot.getString("profileimg");
                                         UserModel model = new UserModel();
                                         model.setUid(muid);
                                         model.setUsernickname(nickname);
-                                        //model.setProfileImageUrl();
+                                        model.setProfileImageUrl(profileImg);
                                         userList.add(model);
+                                        adapter.notifyDataSetChanged();
                                     }
                                 });
                             }
-                            adapter.notifyDataSetChanged();
+
+
                         }
                     }
                 }
@@ -156,6 +163,7 @@ public class SelectUserDialog {
     }
 
     public void selectedPosition(int i){
+        Log.d(TAG, userList.get(i).getUsernickname()+ " is selected.");
         if(!selected){
             selected = true;
         }

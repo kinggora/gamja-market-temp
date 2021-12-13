@@ -17,15 +17,17 @@
 
         <TextView
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:id="@+id/likelist_toolbar_title"
+            android:id="@+id/main_toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
 
         <ImageView
+            android:id="@+id/main_toolbar_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/arrow_down_float" />
+            android:src="@android:drawable/arrow_down_float"
+            android:visibility="invisible" />
     </androidx.appcompat.widget.Toolbar>
 
 

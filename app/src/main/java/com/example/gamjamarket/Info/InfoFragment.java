@@ -11,9 +11,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.gamjamarket.Chat.MessageActivity;
+import com.example.gamjamarket.Login.DongRegisterActivity;
+import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.R;
+import com.example.gamjamarket.Setting.LikesListActivity;
+import com.example.gamjamarket.Setting.MyItemActivity;
+import com.example.gamjamarket.Setting.ProfileImg;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,14 +34,23 @@ public class InfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //툴바 설정
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            ((MainActivity) activity).setActionBarTitle("내 정보");
+            ((MainActivity) activity).findViewById(R.id.main_toolbar_image).setVisibility(View.INVISIBLE);
+            ((MainActivity) activity).findViewById(R.id.main_toolbar_image).setVisibility(View.INVISIBLE);
+        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         mAuth = FirebaseAuth.getInstance();
         String uid = mAuth.getCurrentUser().getUid();
+        ProfileImg profileImg = new ProfileImg();
 
         TextView nickname = view.findViewById(R.id.infoFragment_textview_nickname);
+        ImageView profileImageView = view.findViewById(R.id.infoFragment_imageview);
         ImageView settingBtn = view.findViewById(R.id.infoFragment_btn_setting);
         LinearLayout myProductBtn = view.findViewById(R.id.infoFragment_btn_myproduct);
         LinearLayout heartBtn = view.findViewById(R.id.infoFragment_btn_heart);
@@ -50,6 +65,7 @@ public class InfoFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         nickname.setText(document.getString("nickname"));
+                        profileImageView.setImageResource(profileImg.getSrc(document.getString("profileimg")));
                     }
                 }
             }
@@ -66,14 +82,16 @@ public class InfoFragment extends Fragment {
         myProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent myitemActivity = new Intent(v.getContext(), MyItemActivity.class);
+                startActivity(myitemActivity);
             }
         });
 
         heartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent likeslistActivity = new Intent(v.getContext(), LikesListActivity.class);
+                startActivity(likeslistActivity);
             }
         });
 
@@ -87,7 +105,8 @@ public class InfoFragment extends Fragment {
         positionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent dongRegisterActivity = new Intent(v.getContext(), DongRegisterActivity.class);
+                startActivity(dongRegisterActivity);
             }
         });
         return view;

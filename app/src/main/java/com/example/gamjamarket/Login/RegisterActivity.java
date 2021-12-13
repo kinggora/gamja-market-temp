@@ -3,6 +3,7 @@ package com.example.gamjamarket.Login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 //이메일, 패스워드를 통한 로그인
@@ -146,8 +148,9 @@ public class RegisterActivity extends Activity {
                 String name = editName.getText().toString();
                 String phone = editPhone.getText().toString();
                 String nickname = editNickname.getText().toString();
+                String profileimg = getProfileimg();
 
-                user = new User(email, name, nickname, phone);
+                user = new User(email, name, nickname, phone, profileimg);
 
                 ProfileVerifier verifier = new ProfileVerifier(getApplicationContext());
                 if(verifier.verifyProfile(email, password, password2, name, nickname) && phoneAuth){
@@ -163,6 +166,18 @@ public class RegisterActivity extends Activity {
         });
 
 
+    }
+
+    public String getProfileimg(){
+        int n = randInt(0, 20);
+        String src = "profileimg" + Integer.toString(n);
+        return src;
+    }
+
+    public int randInt(int min, int max) {
+        Random rand = new Random();
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+        return randomNum;
     }
 
     private void createAccount(String email, String password) {

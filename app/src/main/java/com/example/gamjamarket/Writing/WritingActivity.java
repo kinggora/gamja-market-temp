@@ -46,6 +46,7 @@ import java.util.Date;
 public class WritingActivity extends AppCompatActivity {
     private static final String TAG = "WritingActivity";
     private FirebaseUser user;
+    private FirebaseAuth mAuth;
 
     private String title;
     private String explain;
@@ -72,6 +73,7 @@ public class WritingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_writing);
         InitializationToolbar();
 
+        mAuth = mAuth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         categoryBtn = (Button)findViewById(R.id.categoryButton);
@@ -302,6 +304,18 @@ public class WritingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            reload();
+        }
+    }
+
+    private void reload() {
+        Log.d(TAG, "no auth");
+
+    }
 
 
 

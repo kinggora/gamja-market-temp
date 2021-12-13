@@ -13,12 +13,10 @@
             android:id="@+id/infoFragment_imageview"
             android:layout_margin="10dp"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/moonface"/>
+            android:layout_height="60dp" />
         <TextView
             android:layout_marginTop="10dp"
             android:id="@+id/infoFragment_textview_nickname"
-            android:text="닉네임"
             android:textSize="20dp"
             android:layout_toRightOf="@id/infoFragment_imageview"
             android:layout_width="wrap_content"

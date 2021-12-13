@@ -36,5 +36,6 @@
         <activity android:name=".Setting.LikesListActivity" />
         <activity android:name=".Setting.MyItemActivity"/>
         <activity android:name=".Category.SearchResultActivity"/>
+        <activity android:name=".Chat.MessageActivity"/>
     </application>
 </manifest>

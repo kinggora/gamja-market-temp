@@ -193,7 +193,6 @@ public class HomeFragment extends Fragment {
             case R.id.action_like :
                 Intent likeslistActivity = new Intent(getContext(), LikesListActivity.class);
                 getContext().startActivity(likeslistActivity);
-
                 return true;
 
         }
@@ -206,6 +205,7 @@ public class HomeFragment extends Fragment {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             titleView = (TextView)((MainActivity) activity).setActionBarTitle(strings[strings.length-1]);
+            ((MainActivity) activity).findViewById(R.id.main_toolbar_image).setVisibility(View.VISIBLE);
             titleView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -21,6 +21,7 @@
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".Login.RegisterActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".Chat.MessageActivity" />
         <activity android:name=".Info.InfoActivity" />
         <activity android:name=".Info.InfoModifyActivity"
             android:parentActivityName=".Info.InfoActivity"/>

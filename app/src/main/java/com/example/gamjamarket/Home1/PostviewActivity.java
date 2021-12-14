@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.gamjamarket.Chat.MessageActivity;
-import com.example.gamjamarket.Model.UserModel;
 import com.example.gamjamarket.Model.WriteinfoModel;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +24,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
 
@@ -84,6 +82,7 @@ public class PostviewActivity extends FragmentActivity {
                         int likes = document.getDouble("likes").intValue();
                         int views = document.getDouble("views").intValue();
 
+<<<<<<< HEAD
                         WriteinfoModel postModel = new WriteinfoModel(title, category, explain, contents, type, wuid, createdAt, dongcode, dongname);
                         postModel.setPid(pid);
                         postModel.setLikes(likes);
@@ -128,6 +127,14 @@ public class PostviewActivity extends FragmentActivity {
                                 }
                             }
                         });
+=======
+                        WriteinfoModel model = new WriteinfoModel(title, category, explain, contents, type, wuid, nickname, createdAt, dongcode, dongname);
+                        model.setPid(pid);
+                        model.setLikes(likes);
+                        model.setViews(views);
+                        setUI(model);
+
+>>>>>>> aef4eb276152b152329c0ccddfdb24858f6b2657
                     } else {
                         Log.d(TAG, "no such document", task.getException());
                     }
@@ -138,7 +145,7 @@ public class PostviewActivity extends FragmentActivity {
         });
     }
 
-    public void setUI(WriteinfoModel model, UserModel userModel){
+    public void setUI(WriteinfoModel model){
         type.setText(model.getType());
 
         if(model.getUid().equals(uid)){
@@ -149,7 +156,6 @@ public class PostviewActivity extends FragmentActivity {
         PostviewFragment postviewFragemnt = new PostviewFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("writeinfoModel", model);
-        bundle.putSerializable("userModel", userModel);
         postviewFragemnt.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.postview2Framelayout, postviewFragemnt).commit();
 

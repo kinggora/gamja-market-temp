@@ -58,7 +58,7 @@ public class MyItemFragment extends Fragment {
         LinearLayoutManager verticalLayoutManager
                 = new LinearLayoutManager(inflater.getContext(), LinearLayoutManager.VERTICAL, false);
         myitemListView.setLayoutManager(verticalLayoutManager);
-        postAdapter = new MyItemAdapter(postList, ONSALE, getActivity());
+        postAdapter = new MyItemAdapter(postList, getActivity());
         myitemListView.setAdapter(postAdapter);
 
         return view;
@@ -113,7 +113,7 @@ public class MyItemFragment extends Fragment {
         if (!loaded) {
             loaded = true;
         } else {
-            postAdapter = new MyItemAdapter(postList, ONSALE, getActivity());
+            postAdapter = new MyItemAdapter(postList, getActivity());
             myitemListView.setAdapter(postAdapter);
         }
         getPostSet();

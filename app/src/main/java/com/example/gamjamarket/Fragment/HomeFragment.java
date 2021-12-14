@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamjamarket.Category.CategoryActivity;
-import com.example.gamjamarket.Category.PostInCategory1Activity;
 import com.example.gamjamarket.Home1.HomeCategoryAdapter;
 import com.example.gamjamarket.Home1.HomePostAdapter;
 import com.example.gamjamarket.Login.DongRegisterActivity;
@@ -27,7 +26,6 @@ import com.example.gamjamarket.Model.CategoryModel;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.example.gamjamarket.Setting.LikesListActivity;
-import com.example.gamjamarket.Setting.MyItemActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;

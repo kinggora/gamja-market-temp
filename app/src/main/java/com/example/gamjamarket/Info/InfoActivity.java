@@ -5,29 +5,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.R;
-import com.example.gamjamarket.Setting.ProfileImg;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class InfoActivity extends AppCompatActivity {
     private static final String TAG = "InfoActivity";
@@ -40,7 +33,6 @@ public class InfoActivity extends AppCompatActivity {
     private Button logoutButton;
     private Button passwordButton;
     private Button unregisterButton;
-    private ImageView profileImageView;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -62,9 +54,30 @@ public class InfoActivity extends AppCompatActivity {
         logoutButton = (Button) findViewById(R.id.infoActivity_btn_logout);
         passwordButton = (Button) findViewById(R.id.infoActivity_btn_passwordmodify);
         unregisterButton = (Button) findViewById(R.id.infoActivity_btn_unregister);
-        profileImageView = (ImageView) findViewById(R.id.infoActivity_imageview);
 
+<<<<<<< HEAD
         setUI(uid);
+=======
+        DocumentReference docRef = db.collection("users").document(uid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        nickname.setText(document.getString("nickname"));
+                        name.setText(document.getString("name"));
+                        email.setText(document.getString("email"));
+                        phoneNumber.setText(document.getString("phone"));
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+>>>>>>> aef4eb276152b152329c0ccddfdb24858f6b2657
 
         modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +119,7 @@ public class InfoActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                db.collection("users").document(uid)
+                db.collection("user").document(uid)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -120,28 +133,8 @@ public class InfoActivity extends AppCompatActivity {
                                 Log.w(TAG, "Error deleting document", e);
                             }
                         });
-
-                //좋아요 목록 삭제
-                db.collection("likes").document(uid).delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error deleting document", e);
-                            }
-                        });
-
-                    //게시글 삭제
-//                db.collection("board1")
-//                        .whereEqualTo("uid", uid).delete();
             }
         });
-
     }
 
     public void setUI(String uid){

@@ -11,15 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
-import com.example.gamjamarket.Chat.MessageActivity;
-import com.example.gamjamarket.Login.DongRegisterActivity;
-import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.R;
-import com.example.gamjamarket.Setting.LikesListActivity;
-import com.example.gamjamarket.Setting.MyItemActivity;
-import com.example.gamjamarket.Setting.ProfileImg;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,12 +31,6 @@ public class InfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //툴바 설정
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            ((MainActivity) activity).setActionBarTitle("내 정보");
-            //((MainActivity) activity).findViewById(R.id.main_toolbar_image).setVisibility(View.INVISIBLE);
-        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -51,15 +38,34 @@ public class InfoFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         String uid = mAuth.getCurrentUser().getUid();
 
+<<<<<<< HEAD
         nickname = view.findViewById(R.id.infoFragment_textview_nickname);
         profileImageView = view.findViewById(R.id.infoFragment_imageview);
+=======
+        TextView nickname = view.findViewById(R.id.infoFragment_textview_nickname);
+>>>>>>> aef4eb276152b152329c0ccddfdb24858f6b2657
         ImageView settingBtn = view.findViewById(R.id.infoFragment_btn_setting);
         LinearLayout myProductBtn = view.findViewById(R.id.infoFragment_btn_myproduct);
         LinearLayout heartBtn = view.findViewById(R.id.infoFragment_btn_heart);
         LinearLayout reviewBtn = view.findViewById(R.id.infoFragment_btn_review);
         LinearLayout positionBtn = view.findViewById(R.id.infoFragment_btn_position);
 
+<<<<<<< HEAD
         setUI(uid);
+=======
+        DocumentReference docRef = db.collection("users").document(uid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        nickname.setText(document.getString("nickname"));
+                    }
+                }
+            }
+        });
+>>>>>>> aef4eb276152b152329c0ccddfdb24858f6b2657
 
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,16 +78,14 @@ public class InfoFragment extends Fragment {
         myProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myitemActivity = new Intent(v.getContext(), MyItemActivity.class);
-                startActivity(myitemActivity);
+
             }
         });
 
         heartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent likeslistActivity = new Intent(v.getContext(), LikesListActivity.class);
-                startActivity(likeslistActivity);
+
             }
         });
 
@@ -95,8 +99,7 @@ public class InfoFragment extends Fragment {
         positionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent dongRegisterActivity = new Intent(v.getContext(), DongRegisterActivity.class);
-                startActivity(dongRegisterActivity);
+
             }
         });
         return view;

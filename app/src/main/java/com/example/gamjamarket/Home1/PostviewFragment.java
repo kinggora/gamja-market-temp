@@ -81,7 +81,6 @@ public class PostviewFragment extends Fragment {
                 v.getContext().startActivity(ProfileActivity);
             }
         });
-
         return view;
     }
 

@@ -38,5 +38,6 @@
         <activity android:name=".Setting.MyItemActivity"/>
         <activity android:name=".Category.SearchResultActivity"/>
         <activity android:name=".Chat.MessageActivity"/>
+        <activity android:name=".Setting.ModifyPostActivity"/>
     </application>
 </manifest>

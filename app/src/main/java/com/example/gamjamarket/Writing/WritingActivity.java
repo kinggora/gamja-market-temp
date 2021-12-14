@@ -304,19 +304,5 @@ public class WritingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            reload();
-        }
-    }
-
-    private void reload() {
-        Log.d(TAG, "no auth");
-
-    }
-
-
 
 }

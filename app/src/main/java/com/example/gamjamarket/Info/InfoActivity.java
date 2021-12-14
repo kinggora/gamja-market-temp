@@ -21,9 +21,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class InfoActivity extends AppCompatActivity {
     private static final String TAG = "InfoActivity";
@@ -120,7 +124,7 @@ public class InfoActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                db.collection("user").document(uid)
+                db.collection("users").document(uid)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -134,6 +138,25 @@ public class InfoActivity extends AppCompatActivity {
                                 Log.w(TAG, "Error deleting document", e);
                             }
                         });
+
+                //좋아요 목록 삭제
+                db.collection("likes").document(uid).delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
+
+                    //게시글 삭제
+//                db.collection("board1")
+//                        .whereEqualTo("uid", uid).delete();
             }
         });
 

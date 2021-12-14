@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -109,7 +110,10 @@ public class MyItemDialog {
     }
 
     public void modifyPost(){
-
+        Intent modifyPostActivity = new Intent(context, ModifyPostActivity.class);
+        modifyPostActivity.putExtra("pid", item.getPid());
+        context.startActivity(modifyPostActivity);
+        dialog.dismiss();
     }
 
     private void deletePost(){

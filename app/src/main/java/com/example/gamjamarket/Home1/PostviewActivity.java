@@ -120,12 +120,11 @@ public class PostviewActivity extends FragmentActivity {
                                             }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            //리뷰 없음
-                                            setUI(postModel, userModel);
+
                                         }
                                     });
                                 }else{
-                                    //
+                                    Log.d(TAG, "no profileimg field", task.getException());
                                 }
                             }
                         });

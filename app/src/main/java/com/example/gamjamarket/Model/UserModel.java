@@ -1,18 +1,15 @@
 package com.example.gamjamarket.Model;
 
-public class UserModel {
+import java.io.Serializable;
+
+public class UserModel implements Serializable {
     public String username;
     public String profileImageUrl;
     public String usernickname;
     public String uid;
-    public float ratingMean;
+    public float ratingMean = 0;
 
-    public String getUsername(){
-        return username;
-    }
-    public void setUsername(String name){
-        username = name;
-    }
+    public UserModel(){}
 
     public String getProfileImageUrl(){
         return profileImageUrl;
@@ -31,12 +28,19 @@ public class UserModel {
     }
 
     public String getUid(){
-        return username;
+        return uid;
     }
+
     public void setUid(String muid){
         uid = muid;
     }
 
+    public float getRatingMean(){
+        return ratingMean;
+    }
 
+    public void setRatingMean(float ratingMean){
+        this.ratingMean = ratingMean;
+    }
 
 }

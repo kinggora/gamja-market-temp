@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -13,12 +14,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.gamjamarket.Login.DongRegisterActivity;
-import com.example.gamjamarket.Login.LoginActivity;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -103,12 +100,16 @@ public class MyItemDialog {
 
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+                dialog.dismiss();
             }
         });
     }
 
     public void modifyPost(){
-
+        Intent modifyPostActivity = new Intent(context, ModifyPostActivity.class);
+        modifyPostActivity.putExtra("pid", item.getPid());
+        context.startActivity(modifyPostActivity);
+        dialog.dismiss();
     }
 
     private void deletePost(){
@@ -128,7 +129,6 @@ public class MyItemDialog {
         db.collection("board1").document(item.getPid()).update("onsale", onsale).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                //구매후기 작성을 위한 팝업으로...
                 Toast.makeText(context, "거래완료로 상태가 변경되었습니다",
                         Toast.LENGTH_SHORT).show();
                 dialog.dismiss();

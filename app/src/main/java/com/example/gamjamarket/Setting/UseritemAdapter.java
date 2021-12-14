@@ -1,23 +1,16 @@
 package com.example.gamjamarket.Setting;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.Model.UserModel;
 import com.example.gamjamarket.R;
 
@@ -34,6 +27,7 @@ public class UseritemAdapter extends RecyclerView.Adapter<UseritemAdapter.ViewHo
     public UseritemAdapter(ArrayList mArraylist, Context context, SelectUserDialog dialog){
         userList = (ArrayList<UserModel>)mArraylist;
         this.context = context;
+        this.dialog = dialog;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,9 +70,8 @@ public class UseritemAdapter extends RecyclerView.Adapter<UseritemAdapter.ViewHo
 
     public void onBindViewHolder (UseritemAdapter.ViewHolder viewHolder, final int position){
         Log.d(TAG, "Element " + position + " set.");
-//        Glide.with(context)
-//                .load(userList.get(position).getProfileImageUrl())
-//                .into(viewHolder.itemImage);
+        ProfileImg profileImg = new ProfileImg();
+        viewHolder.itemImage.setImageResource(profileImg.getSrc(userList.get(position).getProfileImageUrl()));
         viewHolder.itemNickname.setText(userList.get(position).getUsernickname());
     }
 

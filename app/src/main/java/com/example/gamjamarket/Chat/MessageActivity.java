@@ -54,6 +54,7 @@ public class MessageActivity extends AppCompatActivity {
     private String productImage;
     private String productName;
     private String boardNum;
+    private String pid;
     private ImageView imageView_pImage;
     private TextView textView_pTitle;
     private LinearLayout linearLayoutProduct;
@@ -82,6 +83,7 @@ public class MessageActivity extends AppCompatActivity {
         productImage = getIntent().getStringExtra("productImage");
         productName = getIntent().getStringExtra("productName");
         boardNum = getIntent().getStringExtra("boardNum");
+        pid = getIntent().getStringExtra("pid");
         linearLayoutProduct = (LinearLayout)findViewById(R.id.messageActivity_LinearLayout);
         button = (ImageView)findViewById(R.id.messageActivity_button);
         addImage = (ImageView)findViewById(R.id.messageActivity_button_plus);
@@ -98,6 +100,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //제품상세페이지로이동
                 Intent intent = new Intent(v.getContext(), PostviewActivity.class);
+                intent.putExtra("pid", pid);
                 startActivity(intent);
             }
         });
@@ -160,6 +163,7 @@ public class MessageActivity extends AppCompatActivity {
                     PostlistItem postlistItem = new PostlistItem();
                     postlistItem.setTitle(productName);
                     postlistItem.setContents(productImage);
+                    postlistItem.setPid(pid);
                     mDatabase.child("chatrooms").child(destinationUid).child("post").setValue(postlistItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,12 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.R;
+import com.example.gamjamarket.Setting.ProfileImg;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,7 +37,9 @@ public class InfoActivity extends AppCompatActivity {
     private Button logoutButton;
     private Button passwordButton;
     private Button unregisterButton;
+    private ImageView profileImageView;
 
+    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
@@ -44,6 +50,8 @@ public class InfoActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         String uid = mAuth.getCurrentUser().getUid();
 
+        ProfileImg profileImg = new ProfileImg();
+
         nickname = (TextView) findViewById(R.id.infoActivity_textview_nicname);
         name = (TextView) findViewById(R.id.infoActivity_textview_name2);
         email = (TextView) findViewById(R.id.infoActivity_textview_email2);
@@ -52,6 +60,7 @@ public class InfoActivity extends AppCompatActivity {
         logoutButton = (Button) findViewById(R.id.infoActivity_btn_logout);
         passwordButton = (Button) findViewById(R.id.infoActivity_btn_passwordmodify);
         unregisterButton = (Button) findViewById(R.id.infoActivity_btn_unregister);
+        profileImageView = (ImageView) findViewById(R.id.infoActivity_imageview);
 
         DocumentReference docRef = db.collection("users").document(uid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -64,6 +73,7 @@ public class InfoActivity extends AppCompatActivity {
                         name.setText(document.getString("name"));
                         email.setText(document.getString("email"));
                         phoneNumber.setText(document.getString("phone"));
+                        profileImageView.setImageResource(profileImg.getSrc(document.getString("profileimg")));
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -112,7 +122,7 @@ public class InfoActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                db.collection("user").document(uid)
+                db.collection("users").document(uid)
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -126,7 +136,27 @@ public class InfoActivity extends AppCompatActivity {
                                 Log.w(TAG, "Error deleting document", e);
                             }
                         });
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                mDatabase.child("users").child(uid).removeValue();
             }
         });
+        //좋아요 목록 삭제
+        db.collection("likes").document(uid).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+
+        //게시글 삭제
+//                db.collection("board1")
+//                        .whereEqualTo("uid", uid).delete();
     }
 }

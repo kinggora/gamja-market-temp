@@ -7,7 +7,6 @@
     <ImageView
         android:layout_margin="20dp"
         android:id="@+id/profileActivity_imageview"
-        android:src="@drawable/moonface"
         android:layout_width="100dp"
         android:layout_height="100dp"/>
     <TextView

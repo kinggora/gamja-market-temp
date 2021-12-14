@@ -80,10 +80,11 @@ public class PostviewActivity2 extends FragmentActivity {
                         String pid = document.getString("pid");
                         int likes = document.getDouble("likes").intValue();
 
-                        WriteinfoModel model = new WriteinfoModel(title, category, explain, contents, address, callnumber, wuid, nickname, createdAt);
-                        model.setPid(pid);
-                        model.setLikes(likes);
-                        setUI(model);
+                        WriteinfoModel postModel = new WriteinfoModel(title, category, explain, contents, address, callnumber, wuid, nickname, createdAt);
+                        postModel.setPid(pid);
+                        postModel.setLikes(likes);
+
+                        setUI(postModel);
 
                     } else {
                         Log.d(TAG, "no such document", task.getException());

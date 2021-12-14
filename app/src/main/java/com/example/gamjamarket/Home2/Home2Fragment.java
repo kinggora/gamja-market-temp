@@ -89,6 +89,7 @@ public class Home2Fragment extends Fragment {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             ((MainActivity) activity).setActionBarTitle("기부해요");
+            ((MainActivity) activity).findViewById(R.id.main_toolbar_image).setVisibility(View.INVISIBLE);
         }
         return view;
     }

@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     public View setActionBarTitle(String title) {
         ActionBar actionBar = getSupportActionBar();
-        TextView toolbarTitle = (TextView)findViewById(R.id.likelist_toolbar_title);
+        TextView toolbarTitle = (TextView)findViewById(R.id.main_toolbar_title);
         if (actionBar != null) {
             actionBar.setTitle("");
             toolbarTitle.setText(title);

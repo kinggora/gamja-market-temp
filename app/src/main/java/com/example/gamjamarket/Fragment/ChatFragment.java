@@ -20,6 +20,7 @@ import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
+import com.example.gamjamarket.Setting.ProfileImg;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -132,10 +133,8 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User userModel = snapshot.getValue(User.class);
-                    /*Glide.with(customViewHolder.itemView.getContext())
-                            .load(userModel.profileImageUrl)
-                            .apply(new RequestOptions().circleCrop())
-                            .into(customViewHolder.imageView);*/
+                    ProfileImg profileImg = new ProfileImg();
+                    customViewHolder.imageView.setImageResource(profileImg.getSrc(userModel.getProfileimg()));
                     customViewHolder.textView_title.setText(userModel.getNickname());
                 }
                 @Override
@@ -165,7 +164,7 @@ public class ChatFragment extends Fragment {
             long unixTime = (long) chatModels.get(position).comments.get(lastMessageKey).timestamp;
             Date date = new Date(unixTime);
             customViewHolder.textView_timestamp.setText(simpleDateFormat.format(date));
-            customViewHolder.unreadMessage.setText(unreadCount);
+            //customViewHolder.unreadMessage.setText(unreadCount);
             Glide.with(getContext())
                     .load(productImage)
                     .into(customViewHolder.imageView_product);

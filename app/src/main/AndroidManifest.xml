@@ -24,6 +24,8 @@
         <activity android:name=".Chat.MessageActivity" />
         <activity android:name=".Chat.MessageActivity2" />
         <activity android:name=".Info.InfoActivity" />
+        <activity android:name=".Info.ReviewActivity" />
+        <activity android:name=".Info.ProfileActivity" />
         <activity android:name=".Info.InfoModifyActivity"
             android:parentActivityName=".Info.InfoActivity"/>
         <activity android:name=".Info.PasswordModifyActivity"
@@ -38,5 +40,6 @@
         <activity android:name=".Setting.LikesListActivity" />
         <activity android:name=".Setting.MyItemActivity"/>
         <activity android:name=".Category.SearchResultActivity"/>
+        <activity android:name=".Setting.ModifyPostActivity"/>
     </application>
 </manifest>

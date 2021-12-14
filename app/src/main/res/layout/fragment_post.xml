@@ -83,39 +83,30 @@
             <LinearLayout
                 android:id="@+id/post_sellerinfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_height="60dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/border"
-                android:layout_marginBottom="20dp">
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/post_userimage"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp" />
 
                 <TextView
                     android:id="@+id/post_nicknameTextview"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
                     android:text="닉네임" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="20dp">
-
-                    <TextView
-                        android:id="@+id/textView16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="전체 상품 " />
-
-                    <TextView
-                        android:id="@+id/post_postnum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="게시글 수" />
-                </LinearLayout>
+                <RatingBar
+                    android:id="@+id/post_rating"
+                    style="@android:style/Widget.Material.Light.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp" />
 
             </LinearLayout>
 

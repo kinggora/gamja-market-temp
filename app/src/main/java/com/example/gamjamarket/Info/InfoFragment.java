@@ -30,6 +30,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class InfoFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private TextView nickname;
+    private ImageView profileImageView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,29 +50,16 @@ public class InfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         mAuth = FirebaseAuth.getInstance();
         String uid = mAuth.getCurrentUser().getUid();
-        ProfileImg profileImg = new ProfileImg();
 
-        TextView nickname = view.findViewById(R.id.infoFragment_textview_nickname);
-        ImageView profileImageView = view.findViewById(R.id.infoFragment_imageview);
+        nickname = view.findViewById(R.id.infoFragment_textview_nickname);
+        profileImageView = view.findViewById(R.id.infoFragment_imageview);
         ImageView settingBtn = view.findViewById(R.id.infoFragment_btn_setting);
         LinearLayout myProductBtn = view.findViewById(R.id.infoFragment_btn_myproduct);
         LinearLayout heartBtn = view.findViewById(R.id.infoFragment_btn_heart);
         LinearLayout reviewBtn = view.findViewById(R.id.infoFragment_btn_review);
         LinearLayout positionBtn = view.findViewById(R.id.infoFragment_btn_position);
 
-        DocumentReference docRef = db.collection("users").document(uid);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        nickname.setText(document.getString("nickname"));
-                        profileImageView.setImageResource(profileImg.getSrc(document.getString("profileimg")));
-                    }
-                }
-            }
-        });
+        setUI(uid);
 
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +100,30 @@ public class InfoFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void setUI(String uid){
+        ProfileImg profileImg = new ProfileImg();
+        DocumentReference docRef = db.collection("users").document(uid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        nickname.setText(document.getString("nickname"));
+                        profileImageView.setImageResource(profileImg.getSrc(document.getString("profileimg")));
+                    }
+                }
+            }
+        });
+    }
+
+    public void onResume(){
+        super.onResume();
+        String uid = mAuth.getCurrentUser().getUid();
+        setUI(uid);
+
     }
 
 }

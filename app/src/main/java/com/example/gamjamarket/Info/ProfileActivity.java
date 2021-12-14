@@ -53,6 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (document.exists()) {
                         nickname.setText(document.getString("nickname"));
                         image.setImageResource(profileImg.getSrc(document.getString("profileimg")));
+
                     } else {
                         Log.d(TAG, "No such document");
                     }

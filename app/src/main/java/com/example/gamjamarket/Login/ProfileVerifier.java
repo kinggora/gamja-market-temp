@@ -99,4 +99,46 @@ public class ProfileVerifier {
 
         return true;
     }
+
+    public boolean verifyProfile (String mNickname, String mName, String mEmail, String mPhonenumber){
+        if(mEmail.length() == 0 || mPhonenumber.length() == 0 || mName.length() == 0 || mNickname.length() == 0){
+            Toast.makeText(context,"작성하지 않은 항목이 있습니다.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //이메일 유효성
+        String Rule = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+
+        Pattern p = Pattern.compile(Rule);
+        Matcher m = p.matcher(mEmail);
+        if(!m.matches()) {
+            Toast.makeText(context,"이메일 양식이 올바르지 않습니다.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //이름 유효성 (한글만)
+        Rule = "^[가-힣]*$";
+        p = Pattern.compile(Rule);
+        m = p.matcher(mName);
+        if(!m.matches()) {
+            Toast.makeText(context,"이름이 올바르지 않습니다.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //닉네임 유효성 (한글, 영문, 숫자, ._- 허용, 2자 이상
+        Rule = "^[가-힣ㄱ-ㅎa-zA-Z0-9._-]{2,}$";
+        p = Pattern.compile(Rule);
+        m = p.matcher(mNickname);
+        if(!m.matches()) {
+            Toast.makeText(context,"닉네임이 올바르지 않습니다.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+
+    }
 }

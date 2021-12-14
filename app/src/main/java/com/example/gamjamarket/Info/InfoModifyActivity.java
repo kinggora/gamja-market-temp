@@ -10,6 +10,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gamjamarket.Login.ProfileVerifier;
 import com.example.gamjamarket.MainActivity;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,14 +73,17 @@ public class InfoModifyActivity extends AppCompatActivity {
                 String newEmail = email.getText().toString();
                 String newNumber = phoneNumber.getText().toString();
 
-                DocumentReference docRef = db.collection("users").document(uid);
-                docRef.update("nickname", newNickname);
-                docRef.update("name", newName);
-                docRef.update("email", newEmail);
-                docRef.update("phone", newNumber);
-                finish();
-                Intent intent = new Intent(InfoModifyActivity.this, InfoActivity.class);
-                startActivity(intent);
+                ProfileVerifier verifier = new ProfileVerifier(getApplicationContext());
+                if(verifier.verifyProfile(newNickname, newName, newEmail, newNumber)){
+                    DocumentReference docRef = db.collection("users").document(uid);
+                    docRef.update("nickname", newNickname);
+                    docRef.update("name", newName);
+                    docRef.update("email", newEmail);
+                    docRef.update("phone", newNumber);
+                    finish();
+                    Intent intent = new Intent(InfoModifyActivity.this, InfoActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

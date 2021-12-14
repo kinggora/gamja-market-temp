@@ -44,6 +44,8 @@ public class InfoActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +53,6 @@ public class InfoActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         String uid = mAuth.getCurrentUser().getUid();
-
-        ProfileImg profileImg = new ProfileImg();
 
         nickname = (TextView) findViewById(R.id.infoActivity_textview_nicname);
         name = (TextView) findViewById(R.id.infoActivity_textview_name2);
@@ -64,32 +64,14 @@ public class InfoActivity extends AppCompatActivity {
         unregisterButton = (Button) findViewById(R.id.infoActivity_btn_unregister);
         profileImageView = (ImageView) findViewById(R.id.infoActivity_imageview);
 
-        DocumentReference docRef = db.collection("users").document(uid);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        nickname.setText(document.getString("nickname"));
-                        name.setText(document.getString("name"));
-                        email.setText(document.getString("email"));
-                        phoneNumber.setText(document.getString("phone"));
-                        profileImageView.setImageResource(profileImg.getSrc(document.getString("profileimg")));
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
+        setUI(uid);
 
         modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(InfoActivity.this, InfoModifyActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -159,6 +141,37 @@ public class InfoActivity extends AppCompatActivity {
 //                        .whereEqualTo("uid", uid).delete();
             }
         });
+
+    }
+
+    public void setUI(String uid){
+        ProfileImg profileImg = new ProfileImg();
+        DocumentReference docRef = db.collection("users").document(uid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        nickname.setText(document.getString("nickname"));
+                        name.setText(document.getString("name"));
+                        email.setText(document.getString("email"));
+                        phoneNumber.setText(document.getString("phone"));
+                        profileImageView.setImageResource(profileImg.getSrc(document.getString("profileimg")));
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    public void onResume(){
+        super.onResume();
+        String uid = mAuth.getCurrentUser().getUid();
+        setUI(uid);
 
     }
 }

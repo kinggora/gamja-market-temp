@@ -20,7 +20,6 @@ import com.example.gamjamarket.Login.User;
 import com.example.gamjamarket.Model.ChatModel;
 import com.example.gamjamarket.Model.PostlistItem;
 import com.example.gamjamarket.R;
-import com.example.gamjamarket.Setting.ProfileImg;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -133,8 +132,8 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User userModel = snapshot.getValue(User.class);
-                    ProfileImg profileImg = new ProfileImg();
-                    customViewHolder.imageView.setImageResource(profileImg.getSrc(userModel.getProfileimg()));
+                    //ProfileImg profileImg = new ProfileImg();
+                    //customViewHolder.imageView.setImageResource(profileImg.getSrc(userModel.getProfileimg()));
                     customViewHolder.textView_title.setText(userModel.getNickname());
                 }
                 @Override

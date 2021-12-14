@@ -6,16 +6,14 @@ public class User {
     String nickname;
     String phone;
     String uid;
-    String profileimg;
 
     public User(){}
 
-    public User(String email, String name, String nickname, String phone, String profileimg){        this.email = email;
+    public User(String email, String name, String nickname, String phone){
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.phone = phone;
-        this.profileimg = profileimg;
     }
 
     public void setName(String name){
@@ -36,7 +34,7 @@ public class User {
         this.uid = uid;
     }
 
-    public void setProfileimg(String profileimg){ this.profileimg = profileimg; }
+
 
     public String getEmail() {
         return email;
@@ -58,8 +56,5 @@ public class User {
         return uid;
     }
 
-    public String getProfileimg(){
-        return profileimg;
-    }
 }
 

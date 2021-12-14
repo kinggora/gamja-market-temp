@@ -1,5 +1,6 @@
 package com.example.gamjamarket.Info;
 
+import android.media.Rating;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

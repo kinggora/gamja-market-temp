@@ -204,7 +204,8 @@ public class FindIdPasswordDialog {
             }
         });
 
-        Button btnFind = ((Dialog) dialog).findViewById(R.id.writereview_btn);        btnFind.setOnClickListener(new View.OnClickListener() {
+        Button btnFind = ((Dialog) dialog).findViewById(R.id.selectuser_btn);
+        btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = editEmail.getText().toString();

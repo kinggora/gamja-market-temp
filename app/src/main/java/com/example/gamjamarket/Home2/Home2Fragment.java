@@ -86,6 +86,7 @@ public class Home2Fragment extends Fragment {
         postListView.setAdapter(postAdapter);
 
         getCategorySet();
+
         FragmentActivity activity = getActivity();
         if (activity != null) {
             ((MainActivity) activity).setActionBarTitle("기부해요");

@@ -191,7 +191,6 @@ public class HomeFragment extends Fragment {
             case R.id.action_like :
                 Intent likeslistActivity = new Intent(getContext(), LikesListActivity.class);
                 getContext().startActivity(likeslistActivity);
-
                 return true;
 
         }

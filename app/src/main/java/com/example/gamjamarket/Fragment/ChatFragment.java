@@ -132,8 +132,10 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     User userModel = snapshot.getValue(User.class);
-                    //ProfileImg profileImg = new ProfileImg();
-                    //customViewHolder.imageView.setImageResource(profileImg.getSrc(userModel.getProfileimg()));
+                    /*Glide.with(customViewHolder.itemView.getContext())
+                            .load(userModel.profileImageUrl)
+                            .apply(new RequestOptions().circleCrop())
+                            .into(customViewHolder.imageView);*/
                     customViewHolder.textView_title.setText(userModel.getNickname());
                 }
                 @Override
@@ -163,7 +165,7 @@ public class ChatFragment extends Fragment {
             long unixTime = (long) chatModels.get(position).comments.get(lastMessageKey).timestamp;
             Date date = new Date(unixTime);
             customViewHolder.textView_timestamp.setText(simpleDateFormat.format(date));
-            //customViewHolder.unreadMessage.setText(unreadCount);
+            customViewHolder.unreadMessage.setText(unreadCount);
             Glide.with(getContext())
                     .load(productImage)
                     .into(customViewHolder.imageView_product);

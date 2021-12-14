@@ -28,14 +28,13 @@ public class WriteinfoModel implements Serializable {
     public WriteinfoModel(){}
 
     //board1 게시물 생성자
-    public WriteinfoModel(String title, String category, String explain, String contents, String type, String uid, String nickname, Date createdAt, String dongcode, String dongname){
+    public WriteinfoModel(String title, String category, String explain, String contents, String type, String uid, Date createdAt, String dongcode, String dongname){
         this.title = title;
         this.category = category;
         this.explain = explain;
         this.contents = contents;
         this.type = type;
         this.uid = uid;
-        this.nickname = nickname;
         this.createdAt = createdAt;
         this.dongcode = dongcode;
         this.dongname = dongname;

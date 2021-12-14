@@ -77,7 +77,6 @@ public class PostviewActivity extends FragmentActivity {
                         String contents = document.getString("contents");
                         String wuid = document.getString("uid");
                         String type = document.getString("type");
-                        String nickname = document.getString("nickname");
                         Date createdAt = document.getDate("createdAt");
                         String dongcode = document.getString("dongcode");
                         String dongname = document.getString("dongname");
@@ -85,20 +84,21 @@ public class PostviewActivity extends FragmentActivity {
                         int likes = document.getDouble("likes").intValue();
                         int views = document.getDouble("views").intValue();
 
-                        WriteinfoModel postModel = new WriteinfoModel(title, category, explain, contents, type, wuid, nickname, createdAt, dongcode, dongname);
+                        WriteinfoModel postModel = new WriteinfoModel(title, category, explain, contents, type, wuid, createdAt, dongcode, dongname);
                         postModel.setPid(pid);
                         postModel.setLikes(likes);
                         postModel.setViews(views);
 
                         UserModel userModel = new UserModel();
-                        userModel.setUsernickname(nickname);
                         userModel.setUid(wuid);
 
                         db.collection("users").document(wuid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String nickname = documentSnapshot.getString("nickname");
                                 String profileImg = documentSnapshot.getString("profileimg");
-                                if(profileImg != null){
+                                if(nickname != null && profileImg != null){
+                                    userModel.setUsernickname(nickname);
                                     userModel.setProfileImageUrl(profileImg);
                                     db.collection("users").document(wuid).collection("review").get()
                                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

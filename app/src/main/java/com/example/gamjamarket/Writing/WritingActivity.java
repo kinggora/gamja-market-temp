@@ -188,10 +188,9 @@ public class WritingActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String dongcode = documentSnapshot.getString("dongcode");
                 String dongname = documentSnapshot.getString("dongname");
-                String nickname = documentSnapshot.getString("nickname");
                 String type = getType();
                 WriteinfoModel writeinfoModel = new WriteinfoModel(title, categoryNameList.get(categoryIdx), explain,
-                        contentsList, type, user.getUid(), nickname, new Date(), dongcode, dongname);
+                        contentsList, type, user.getUid(), new Date(), dongcode, dongname);
 
                 db.collection("board1").add(writeinfoModel)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

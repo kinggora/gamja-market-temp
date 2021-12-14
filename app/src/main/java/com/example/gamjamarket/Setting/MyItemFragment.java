@@ -76,7 +76,6 @@ public class MyItemFragment extends Fragment {
                         @Override
                         public void onEvent(QuerySnapshot value, FirebaseFirestoreException e) {
                             postList.clear();
-
                             if (e != null) {
                                 Log.w(TAG, "Listen failed.", e);
                                 return;
@@ -86,15 +85,23 @@ public class MyItemFragment extends Fragment {
                                 String contents = doc.getString("contents");
                                 String wuid = doc.getString("uid");
                                 String type = doc.getString("type");
-                                String nickname = doc.getString("nickname");
                                 Date createdAt = doc.getDate("createdAt");
                                 String pid = doc.getString("pid");
                                 int likes = doc.getDouble("likes").intValue();
 
-                                PostlistItem item = new PostlistItem(pid, title, contents, type, wuid, nickname, createdAt, likes);
-                                postList.add(item);
+                                db.collection("users").document(wuid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        String nickname = documentSnapshot.getString("nickname");
+                                        if(nickname != null){
+                                            PostlistItem item = new PostlistItem(pid, title, contents, type, wuid, nickname, createdAt, likes);
+                                            postList.add(item);
+                                            postAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                });
                             }
-                            postAdapter.notifyDataSetChanged();
+
                         }
                     });
         });

@@ -44,13 +44,12 @@ public class PostviewFragment extends Fragment {
                 .load(model.getContents())
                 .into(contentsImage);
         title.setText(model.getTitle());
-        nickname.setText(model.getNickname());
         dongname.setText(model.getDongname());
         explain.setText(model.getExplain());
         category.setText(model.getCategory());
         likesnum.setText(Integer.toString(model.getLikes()));
         viewsnum.setText(Integer.toString(model.getViews()));
-
+        nickname.setText(userModel.getUsernickname());
         ProfileImg profileImg = new ProfileImg();
         int imgsrc = profileImg.getSrc(userModel.getProfileImageUrl());
         sellerImg.setImageResource(imgsrc);

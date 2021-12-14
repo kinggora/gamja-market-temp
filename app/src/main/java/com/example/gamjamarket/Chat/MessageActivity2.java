@@ -44,8 +44,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class MessageActivity extends AppCompatActivity {
-    private static final String TAG = "MessageActivity";
+public class MessageActivity2 extends AppCompatActivity {
+    private static final String TAG = "MessageActivity2";
 
     private String destinationUid;
     private ImageView button;
@@ -61,6 +61,7 @@ public class MessageActivity extends AppCompatActivity {
     private String uid;
     private String chatRoomUid;
     private RecyclerView recyclerView;
+
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
     private DatabaseReference databaseReference;
     private ValueEventListener valueEventListener;
@@ -118,7 +119,7 @@ public class MessageActivity extends AppCompatActivity {
                 chatModel.users.put(destinationUid,true);
                 if(chatRoomUid == null) {
                     button.setEnabled(false);
-                    mDatabase.child("chatrooms").child(destinationUid).setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mDatabase.child("chatrooms2").child(destinationUid).setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             checkChatRoom();
@@ -129,7 +130,7 @@ public class MessageActivity extends AppCompatActivity {
                     comment.uid = uid;
                     comment.message = editText.getText().toString();
                     comment.timestamp = ServerValue.TIMESTAMP;
-                    mDatabase.child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    mDatabase.child("chatrooms2").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             editText.setText(""); //초기화
@@ -143,14 +144,14 @@ public class MessageActivity extends AppCompatActivity {
     }
     //중복되는 채팅방 체크
     void checkChatRoom() {
-        mDatabase.child("chatrooms").orderByChild("users/" + uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("chatrooms2").orderByChild("users/" + uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue() == null){
                     ChatModel newRoom = new ChatModel();
                     newRoom.users.put(uid, true);
                     newRoom.users.put(destinationUid, true);
-                    mDatabase.child("chatrooms").child(destinationUid).setValue(newRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mDatabase.child("chatrooms2").child(destinationUid).setValue(newRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             checkChatRoom();
@@ -175,7 +176,7 @@ public class MessageActivity extends AppCompatActivity {
                     if (chatModel.users.containsKey(destinationUid) && chatModel.users.size() == 2) {
                         chatRoomUid = item.getKey();
                         button.setEnabled(true);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(MessageActivity.this));
+                        recyclerView.setLayoutManager(new LinearLayoutManager(MessageActivity2.this));
                         recyclerView.setAdapter(new RecyclerViewAdapter());
                     }
                 }
@@ -212,7 +213,7 @@ public class MessageActivity extends AppCompatActivity {
         //메세지 읽어오기
         void getMessageList(){
             mDatabase = FirebaseDatabase.getInstance().getReference();
-            databaseReference = mDatabase.child("chatrooms").child(chatRoomUid).child("comments");
+            databaseReference = mDatabase.child("chatrooms2").child(chatRoomUid).child("comments");
             valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -230,7 +231,7 @@ public class MessageActivity extends AppCompatActivity {
                         return;
                     }
                     else if(!comments.get(comments.size()-1).readUsers.containsKey(uid)) {
-                        mDatabase.child("chatrooms").child(chatRoomUid).child("comments")
+                        mDatabase.child("chatrooms2").child(chatRoomUid).child("comments")
                                 .updateChildren(readUsersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -302,7 +303,7 @@ public class MessageActivity extends AppCompatActivity {
         void setReadCounter(final int position, final TextView textView) {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             if(peopleCount == 0) {
-                mDatabase.child("chatrooms").child(chatRoomUid).child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabase.child("chatrooms2").child(chatRoomUid).child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Map<String, Boolean> users = (Map<String, Boolean>) snapshot.getValue();

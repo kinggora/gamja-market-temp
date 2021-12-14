@@ -59,8 +59,11 @@ public class ChatFragment extends Fragment {
         private List<ChatModel> chatModels = new ArrayList<>();
         private List<ChatModel> chatModels2 = new ArrayList<>();
         private String uid;
+        int unreadCount = 0;
         private ArrayList<String> destinationUsers = new ArrayList<>();
         private String productImage;
+        private String productName;
+        private String boardNum = "board1";
         public ChatRecyclerViewAdapter(){
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -71,7 +74,7 @@ public class ChatFragment extends Fragment {
                         chatModels.add(item.getValue(ChatModel.class));
                     }
                     notifyDataSetChanged();
-                    /*FirebaseDatabase.getInstance().getReference().child("chatrooms").child("post").orderByChild("boardNam").equalTo("board1").addListenerForSingleValueEvent(new ValueEventListener() {
+                    /*FirebaseDatabase.getInstance().getReference().child("chatrooms").child("post").orderByChild(boardNum).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for (DataSnapshot item: snapshot.getChildren()) {
@@ -113,11 +116,13 @@ public class ChatFragment extends Fragment {
                 }
             }
             FirebaseDatabase.getInstance().getReference().child("chatrooms").child(destinationUid).child("post").addListenerForSingleValueEvent(new ValueEventListener() {
-
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     PostlistItem postlistItem = snapshot.getValue(PostlistItem.class);
                     productImage = postlistItem.getContents();
+                    System.out.println("productImage: " + productImage);
+                    productName = postlistItem.getTitle();
+
                 }
 
                 @Override
@@ -147,10 +152,11 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), MessageActivity.class);
-                    intent.putExtra("destinationUid", destinationUsers.get(position));
-                    //대화창 넘기는 애니메이션
-/*                    ActivityOptions activityOptions  = ActivityOptions.makeCustomAnimation(v.getContext(), R.anim.fromright, R.anim.toleft);
-                    startActivity(intent, activityOptions.toBundle());*/
+                    Bundle bundle = new Bundle();
+                    bundle.putString("destinationUid", destinationUsers.get(position));
+                    bundle.putString("productImage", productImage);
+                    bundle.putString("productName", productName);
+                    intent.putExtras(bundle);
                     startActivity(intent);
 
                 }
@@ -159,7 +165,8 @@ public class ChatFragment extends Fragment {
             long unixTime = (long) chatModels.get(position).comments.get(lastMessageKey).timestamp;
             Date date = new Date(unixTime);
             customViewHolder.textView_timestamp.setText(simpleDateFormat.format(date));
-            Glide.with(getActivity())
+            customViewHolder.unreadMessage.setText(unreadCount);
+            Glide.with(getContext())
                     .load(productImage)
                     .into(customViewHolder.imageView_product);
         }
@@ -175,6 +182,8 @@ public class ChatFragment extends Fragment {
             public TextView textView_last_message;
             public TextView textView_timestamp;
             public ImageView imageView_product;
+            public TextView unreadMessage;
+
             public CustomViewHolder(View view) {
 
                 super(view);
@@ -183,6 +192,7 @@ public class ChatFragment extends Fragment {
                 textView_last_message = (TextView) view.findViewById(R.id.chatitem_textview_lastMessage);
                 textView_timestamp = (TextView) view.findViewById(R.id.chatitem_textview_timestamp);
                 imageView_product = (ImageView) view.findViewById(R.id.chatitem_imageview_product);
+                unreadMessage = (TextView) view.findViewById(R.id.chatitem_textview_unread);
             }
         }
     }

@@ -10,9 +10,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-
-import com.example.gamjamarket.Chat.MessageActivity;
-import com.example.gamjamarket.Model.UserModel;
+import com.example.gamjamarket.Chat.MessageActivity2;
 import com.example.gamjamarket.Model.WriteinfoModel;
 import com.example.gamjamarket.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -152,7 +150,7 @@ public class PostviewActivity2 extends FragmentActivity {
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent messageActivity = new Intent(PostviewActivity2.this, MessageActivity.class);
+                Intent messageActivity = new Intent(PostviewActivity2.this, MessageActivity2.class);
                 messageActivity.putExtra("destinationUid",uid);
                 messageActivity.putExtra("productImage",model.getContents());
                 messageActivity.putExtra("productName",model.getTitle());

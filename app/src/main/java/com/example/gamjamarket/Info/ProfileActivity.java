@@ -66,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
         review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, ReviewFragment.class);
+                Intent intent = new Intent(ProfileActivity.this, ReviewActivity.class);
                 startActivity(intent);
             }
         });

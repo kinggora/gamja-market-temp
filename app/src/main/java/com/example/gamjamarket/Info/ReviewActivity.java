@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,15 +23,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewFragment extends Fragment {
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_review, container, false);
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.reviewFragment_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
-        recyclerView.setAdapter(new ReviewFragment.ReviewAdapter());
+public class ReviewActivity extends AppCompatActivity {
+    private static final String TAG = "ReviewActivity";
 
-        return view;
+    private RecyclerView recyclerView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activivy_review);
+
+        recyclerView = (RecyclerView)findViewById(R.id.reviewFragment_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ReviewActivity.this));
+        recyclerView.setAdapter(new ReviewActivity.ReviewAdapter());
     }
+
     class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -60,7 +66,7 @@ public class ReviewFragment extends Fragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend,parent,false);
-            return new ReviewFragment.ReviewAdapter.CustomViewHolder(view);
+            return new ReviewActivity.ReviewAdapter.CustomViewHolder(view);
         }
 
         @Override

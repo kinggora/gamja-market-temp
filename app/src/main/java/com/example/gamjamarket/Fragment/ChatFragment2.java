@@ -57,24 +57,14 @@ public class ChatFragment2 extends Fragment {
         private ArrayList<String> destinationUsers = new ArrayList<>();
         public ChatRecyclerViewAdapter(){
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference().child("chatrooms2").orderByChild("users/"+uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     chatModels.clear();
-                    FirebaseDatabase.getInstance().getReference().child("chatrooms").child("post").orderByChild("boardNam").equalTo("board2").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot item: snapshot.getChildren()) {
-                                chatModels.add(item.getValue(ChatModel.class));
-                            }
-                            notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                    for (DataSnapshot item: snapshot.getChildren()) {
+                        chatModels.add(item.getValue(ChatModel.class));
+                    }
+                    notifyDataSetChanged();
                 }
 
                 @Override
